@@ -1,0 +1,15 @@
+- Create Header
+    -include navbar to other page
+    -include search input
+    -include login if not already logged in
+        -Username
+        -Password
+        -Email
+        -(optional) implement Firebase
+        -(optional) allow option to set pfp
+        -Store data in local storage
+    -include logout if logged in
+
+- Movie carasoul
+    - Make movies cycle through when clicking prev/next buttons
+    - Make movies responsive so when clicked
