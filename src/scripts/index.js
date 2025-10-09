@@ -6,8 +6,8 @@ import { API_ACCESS_TOKEN } from './env.js';
 const URL = {
   // User's favorite movies
   favorites: 'https://api.themoviedb.org/3/account/22367794/favorite/movies?language=en-US&page=1&sort_by=created_at.asc&limit=100',
-  // Search for movies
-  search: 'https://api.themoviedb.org/3/search/movie?language=en-US&query=&limit=100',
+  // Search for movies (query will be appended)
+  search: 'https://api.themoviedb.org/3/search/movie?language=en-US&limit=100&query=',
   // Popular movies
   popular: 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1&limit=100'
 };
@@ -24,7 +24,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   const visibleItemsCount = () => Math.max(1, Math.floor((wrapperEl.clientWidth + size() - TILE) / size()));
 
   const CARD_CONFIG = {
-    // linkHref: '/src/html/title_details.html',
+    linkHref: '/src/html/title_details.html',
     cardClass: 'movie-card bg-white rounded-2xl shadow-md p-4 flex flex-col justify-around items-center min-w-[200px] max-w-[200px] h-[400px] hover:rounded-none hover:scale-105 transition-transform duration-200',
     imgClass: 'w-36 h-54 object-cover mb-2 rounded-lg',
     titleClass: 'font-semibold text-sm text-center mb-1 line-clamp-2',
@@ -41,7 +41,7 @@ document.addEventListener('DOMContentLoaded', async () => {
     const rating = (movie.vote_average != null) ? movie.vote_average.toFixed(1) : 'N/A';
 
     const a = document.createElement('a');
-    // a.href = config.linkHref;
+    a.href = config.linkHref;
 
     const container = document.createElement('div');
     container.className = config.cardClass;
