@@ -5,3 +5,4 @@ import {movieCarousel, URL} from './movieCarousel.js';
 
 // 
 movieCarousel(URL.popular);
+movieCarousel(URL.popular);
