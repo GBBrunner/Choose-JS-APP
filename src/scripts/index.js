@@ -51,18 +51,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     imgEl.className = config.imgClass;
     imgEl.alt = movie.title || '';
     imgEl.onerror = function () { this.onerror = null; this.src = config.blankImage; };
-    container.appendChild(imgEl);
 
     const titleEl = document.createElement('h3');
     titleEl.className = config.titleClass;
     titleEl.textContent = movie.title || '';
-    container.appendChild(titleEl);
 
     const yearEl = document.createElement('p');
     yearEl.className = config.yearClass;
     yearEl.textContent = year;
-    container.appendChild(yearEl);
 
+    // Put the link inside the card div, but only include image/title/year inside the anchor
+    a.appendChild(imgEl);
+    a.appendChild(titleEl);
+    a.appendChild(yearEl);
+    container.appendChild(a);
+
+    // meta stays outside the anchor (so the anchor does not include the meta div)
     const meta = document.createElement('div');
     meta.className = 'flex items-center gap-2 mt-1';
 
@@ -79,18 +83,19 @@ document.addEventListener('DOMContentLoaded', async () => {
     meta.appendChild(ratings);
 
     const addToFavButton = document.createElement('button');
-      addToFavButton.className = "fa-solid fa-heart hover:text-red-400";
-      addToFavButton.addEventListener('click', () => {
-        addToFavButton.classList.toggle('text-red-600');
-        addToFavButton.classList.toggle('hover:text-pink-900');
-      });
+    addToFavButton.className = "fa-solid fa-heart hover:text-red-400";
+    addToFavButton.addEventListener('click', (e) => {
+      // keep click from affecting the link (though meta is outside the anchor)
+      e.stopPropagation();
+      addToFavButton.classList.toggle('text-red-600');
+      addToFavButton.classList.toggle('hover:text-pink-900');
+    });
     meta.appendChild(addToFavButton);
+
     container.appendChild(meta);
 
-    a.appendChild(container);
-
-    // Return the actual element (not HTML string) so we can update children later
-    return a;
+    // Return the container so the anchor is inside the div and meta is outside it
+    return container;
   };
   // Removed unused button block that referenced undefined variables (select, addToCart, product, div).
 
