@@ -22,3 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+# Keep env.js out of version control
+src/scripts/env.js
