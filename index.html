@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Movie Viewer — TMDB Favorites</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/src/scripts/index.js" type="module" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  </head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center py-6">
+  <h1 class="text-3xl font-bold mb-4 text-indigo-700">My Favorite Movies</h1>
+  <div class="flex flex-wrap justify-center gap-3 mb-6">
+    <input id="searchInput" type="text" placeholder="Search all movies..."
+           class="border border-gray-300 rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-60" />
+  </div>
+
+  <div id="movie-wrapper" class="relative overflow-hidden w-screen h-[45rem]">
+    <button id="prevBtn" class="absolute left-2 top-1/2 -translate-y-1/2 bg-indigo-600 opacity-75 hover:opacity-90 text-white p-3 rounded-full shadow-md hover:bg-indigo-700 transition z-10 hidden">
+      <i class="fa-solid fa-chevron-left text-lg"></i>
+    </button>
+    <button id="nextBtn" class="absolute right-2 top-1/2 -translate-y-1/2 bg-indigo-600 bg-opacity-75 hover:opacity-90 text-white p-3 rounded-full shadow-md hover:bg-indigo-700 transition z-10 hidden">
+      <i class="fa-solid fa-chevron-right text-lg"></i>
+    </button>
+    <div id="movie-strip" class="flex flex-row gap-4 items-stretch"></div>
+  </div>
+
+
+</body>
+</html>
