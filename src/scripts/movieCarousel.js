@@ -15,6 +15,45 @@ const URL = {
   upcoming: 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1&limit=100',
   topRated: 'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1&limit=100',
 };
+  // Favorite button
+  const favList = (() => {
+    try {
+      return JSON.parse(localStorage.getItem('favorites')) || [];
+    } catch (e) {
+      console.error('Failed to parse favorites from localStorage', e);
+      return [];
+    }
+  })();
+
+  function isFavorite(movieId) {
+    return favList.some(m => m && m.id === movieId);
+  }
+
+  function addToFavorites(movie) {
+    if (!movie || !movie.id) return;
+    if (isFavorite(movie.id)) return; // avoid duplicates
+    // store a minimal movie object to keep localStorage small
+    const payload = { id: movie.id, title: movie.title, poster_path: movie.poster_path, release_date: movie.release_date, vote_average: movie.vote_average };
+    favList.push(payload);
+    try {
+      localStorage.setItem('favorites', JSON.stringify(favList));
+      window.dispatchEvent(new CustomEvent('favoritesUpdated'));
+    } catch (e) {
+      console.error('Failed to save favorites to localStorage', e);
+    }
+  }
+
+  function removeFromFavorites(movieId) {
+    const idx = favList.findIndex(m => m && m.id === movieId);
+    if (idx === -1) return;
+    favList.splice(idx, 1);
+    try {
+      localStorage.setItem('favorites', JSON.stringify(favList));
+      window.dispatchEvent(new CustomEvent('favoritesUpdated'));
+    } catch (e) {
+      console.error('Failed to save favorites to localStorage', e);
+    }
+  }
 
 // --- Global State ---
 let carouselIdCounter = 0;
@@ -86,10 +125,43 @@ const createMovieCard = (movie, tileSize) => {
     </div>
   `;
 
+
+
+
+
   const favBtn = document.createElement('button');
-  favBtn.className = "fa-solid fa-heart hover:text-red-400";
-  favBtn.onclick = () => favBtn.classList.toggle('text-red-600');
+  favBtn.className = "fa-solid fa-heart";
+  favBtn.type = 'button';
+  favBtn.title = 'Add to favorites';
+  favBtn.style.fontSize = `${scaledSize(18)}px`;
+  favBtn.style.cursor = 'pointer';
+  // set initial color based on stored favorites
+  try {
+    favBtn.style.color = isFavorite(movie.id) ? 'red' : 'black';
+    favBtn.setAttribute('aria-pressed', isFavorite(movie.id) ? 'true' : 'false');
+  } catch (e) {
+    favBtn.style.color = 'black';
+  }
+
+  favBtn.onclick = (evt) => {
+    evt.stopPropagation();
+    // toggle favorite state and persist
+    if (isFavorite(movie.id)) {
+      removeFromFavorites(movie.id);
+      favBtn.style.color = 'black';
+      favBtn.setAttribute('aria-pressed', 'false');
+    } else {
+      addToFavorites(movie);
+      favBtn.style.color = 'red';
+      favBtn.setAttribute('aria-pressed', 'true');
+    }
+  };
   card.querySelector('.flex.items-center.gap-2.mt-1').appendChild(favBtn);
+
+
+
+
+
 
   return card;
 };
