@@ -5,6 +5,7 @@ import { API_ACCESS_TOKEN } from './env.js';
 const API_OPTIONS = {
   headers: {
     accept: 'application/json',
+    // The Access Token should have been set up in env.js as per README instructions. 
     Authorization: `Bearer ${API_ACCESS_TOKEN}`,
   },
 };
@@ -19,14 +20,14 @@ const URL = {
   const favList = (() => {
     try {
       return JSON.parse(localStorage.getItem('favorites')) || [];
-    } catch (e) {
-      console.error('Failed to parse favorites from localStorage', e);
+    } catch (err) {
+      console.error('Failed to parse favorites from localStorage', err);
       return [];
     }
   })();
 
   function isFavorite(movieId) {
-    return favList.some(m => m && m.id === movieId);
+    return favList.some(favItem => favItem && favItem.id === movieId);
   }
 
   function addToFavorites(movie) {
@@ -38,20 +39,20 @@ const URL = {
     try {
       localStorage.setItem('favorites', JSON.stringify(favList));
       window.dispatchEvent(new CustomEvent('favoritesUpdated'));
-    } catch (e) {
-      console.error('Failed to save favorites to localStorage', e);
+    } catch (err) {
+      console.error('Failed to save favorites to localStorage', err);
     }
   }
 
   function removeFromFavorites(movieId) {
-    const idx = favList.findIndex(m => m && m.id === movieId);
+    const idx = favList.findIndex(favItem => favItem && favItem.id === movieId);
     if (idx === -1) return;
     favList.splice(idx, 1);
     try {
       localStorage.setItem('favorites', JSON.stringify(favList));
       window.dispatchEvent(new CustomEvent('favoritesUpdated'));
-    } catch (e) {
-      console.error('Failed to save favorites to localStorage', e);
+    } catch (err) {
+      console.error('Failed to save favorites to localStorage', err);
     }
   }
 
