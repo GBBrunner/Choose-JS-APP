@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Movie Viewer — TMDB Favorites</title>
+  <link rel="stylesheet" href="/src/styles/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/src/scripts/index.js" type="module" defer></script>
+
+  <script defer src="/src/scripts/movieCarousel.js"></script>
+  <script defer src="/src/scripts/login.js"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  </head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center">
+  <header class="flex flex-wrap justify-between gap-3 w-screen p-2 bg-indigo-700">
+    <h1 class="text-3xl font-bold mb-4 text-white">Movies</h1>
+    <input id="searchInput" type="text" placeholder="Search all movies . . ."
+         class="border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-[30rem]" />
+    <nav>
+      <ul>
+          <a href="/src/html/favorites.html" class="text-white hover:underline mx-2">
+            <span class="fa-solid fa-bookmark"></span>
+            <span>Favorites</span>
+          </a>
+          <!-- This needs to be changed with JS based on if the user is logged in or not -->
+            <a href="/src/html/login.html" class="text-white no-underline hover:underline hover:decoration-2 hover:decoration-white hover:underline-offset-5 mx-2 transition-all duration-150">
+            <span class="fa-solid fa-user rounded-full border border-white p-1"></span>
+            <span>Login/Sign Up</span>
+            </a>
+      </ul>
+    </nav>
+  </header>
+        <main>
+            <div class="wrap">
+                <div class="button">
+                    <span id="button1">Login</span>
+                    <span id="button2">Sign Up</span>
+                </div>
+                <div class="forms">
+                <div class="signup-form">
+                    <h2>Sign Up</h2>
+                    <span class="name">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </span>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <button onclick="logNewUser(document.getElementById('firstName').value, document.getElementById('lastName').value, document.getElementById('email').value, document.getElementById('password').value)">Submit</button>
+                </div>
+                <div class="login-form">
+                    <h2>Login</h2>
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="loginEmail" required>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="loginPassword" required>
+                    <button onclick="logIn(document.getElementById('loginEmail').value, document.getElementById('loginPassword').value)">Login</button>
+                </div>
+                </div>
+            </div>
+        </main>
+    </body>
+    </html>
