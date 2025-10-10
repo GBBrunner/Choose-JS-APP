@@ -4,3 +4,82 @@
     box-sizing:border-box;
     font-family: 'Roboto', sans-serif;
 }
+main {
+  width: 100%;
+  height: calc(100vh - 75px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(196, 196, 196);
+}
+main .wrap {
+  background-color: whitesmoke;
+  border: 10px solid whitesmoke;
+  border-radius: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-evenly;
+}
+main .wrap .button {
+  background-color: lightgrey;
+  padding: 7px 0px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  width: -moz-fit-content;
+  width: fit-content;
+}
+main .wrap .button #button1 {
+  border: 10px solid transparent;
+  border-radius: 20px;
+  transition: 0.2s;
+}
+main .wrap .button #button1:hover {
+  background-color: grey;
+  border: 10px solid grey;
+  border-radius: 20px;
+}
+main .wrap .button #button2 {
+  border: 10px solid transparent;
+  border-radius: 20px;
+  transition: 0.2s;
+}
+main .wrap .button #button2:hover {
+  background-color: grey;
+  border: 10px solid grey;
+  border-radius: 20px;
+}
+main .wrap .button .active {
+  background-color: #3F51B5 !important;
+  border: 10px solid #3F51B5 !important;
+}
+main .wrap .forms {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+main .wrap .forms .signup-form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+}
+main .wrap .forms .login-form {
+  display: contents;
+  display: flex;
+  background-color: whitesmoke;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 200px;
+  width: 100%;
+  position: absolute;
+}
+main .wrap .forms .inactive {
+  display: none !important;
+  width: 0px !important;
+}
