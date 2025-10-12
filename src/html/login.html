@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Movie Viewer — TMDB Favorites</title>
+  <link rel="stylesheet" href="/src/styles/style.css" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="/src/scripts/login.js" type="module" defer></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  </head>
+<body class="bg-gray-100 min-h-screen flex flex-col items-center">
+  <!-- Header will be dynamically created by header.js -->
+  
+        <main>
+            <div class="wrap">
+                <div class="button">
+                    <span id="button1">Login</span>
+                    <span id="button2">Sign Up</span>
+                </div>
+                <div class="forms">
+                <div class="signup-form">
+                    <h2>Sign Up</h2>
+                    <span class="name">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" id="firstName" name="firstName" required>
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" id="lastName" name="lastName" required>
+                    </span>
+                    <label for="email">Email:</label>
+                    <input type="email" id="email" name="email" required>
+                    <label for="password">Password:</label>
+                    <input type="password" id="password" name="password" required>
+                    <button id="signupButton">Submit</button>
+                </div>
+                <div class="login-form">
+                    <h2>Login</h2>
+                    <label for="loginEmail">Email:</label>
+                    <input type="email" id="loginEmail" name="loginEmail" required>
+                    <label for="loginPassword">Password:</label>
+                    <input type="password" id="loginPassword" name="loginPassword" required>
+                    <button id="loginButton">Login</button>
+                </div>
+                </div>
+            </div>
+        </main>
+    </body>
+    </html>

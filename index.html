@@ -13,24 +13,8 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
   </head>
 <body class="bg-gray-100 min-h-screen flex flex-col items-center">
-  <header class="flex flex-wrap justify-between gap-3 w-screen p-2 bg-indigo-700">
-    <h1 class="text-3xl font-bold mb-4 text-white">Movies</h1>
-    <input id="searchInput" type="text" placeholder="Search all movies . . ."
-         class="border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-[30rem]" />
-    <nav>
-      <ul>
-          <a href="/src/html/favorites.html" class="text-white hover:underline mx-2">
-            <span class="fa-solid fa-bookmark"></span>
-            <span>Favorites</span>
-          </a>
-          <!-- This needs to be changed with JS based on if the user is logged in or not -->
-            <a href="#" class="text-white no-underline hover:underline hover:decoration-2 hover:decoration-white hover:underline-offset-5 mx-2 transition-all duration-150">
-            <span class="fa-solid fa-user rounded-full border border-white p-1"></span>
-            <span>Login/Sign Up</span>
-            </a>
-      </ul>
-    </nav>
-  </header>
+  <!-- Header will be dynamically created by header.js -->
+  
   <!-- Container for multiple carousels
    This is handled by movieCarousel.js -->
   <div id="carousels-container"></div>
