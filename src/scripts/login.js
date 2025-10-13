@@ -38,11 +38,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 });
 
-function logOut() {
-    localStorage.removeItem('priorUser');
-    location.reload();
-}
-
 class UserList {
     constructor() {
         this.list = [];
@@ -90,7 +85,8 @@ function logIn(email, password) {
             if (user.password === password) {
                 const currentUser = new User(user.firstName, user.lastName, user.email, user.password);
                 currentUser.save();
-                location.reload();
+                // location.reload();
+                window.location.href = '/index.html';
                 return;
             } else {
                 alert('Password Incorrect');

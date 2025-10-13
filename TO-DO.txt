@@ -1,15 +1,30 @@
-- Create Header
-    -include navbar to other page
-    -include search input
-    -include login if not already logged in
-        -Username
-        -Password
-        -Email
-        -(optional) implement Firebase
-        -(optional) allow option to set pfp
-        -Store data in local storage
-    -include logout if logged in
+- Movie Title page
+    - When title is clicked it will go to title_details.html
+    - It will display more info
+        -name
+        -Year
+        -Rating
+        -Poster
+        -Video ( if there is one)
+        -etc . . .
+-Carasoul page
+    -Figure out how to display more than 20 titles at once in a single carasoul, either have it go down full list or display X amount
+- Favorites page
+    - Don't let the user favorite if they are not signed in. Simply just alert "please sign in to add to favorites"
+    - Create new carasoul displaying only the user's favorites
+    - Show custom text if favorites page is empty
+    - (Optional) Don't Display Link to Favorites page if the user is not signed in
+    - Only show search bar on index.html as it will not work on other pages
+-Users page
+    -Display User Info when clicked on name when signed in
+    - First name
+    - Last name
+    - Date Joined
+    - Sign Out Button
+    - Delete Account Button
+    - (Optional) add option to add pfp
+- Validate that the first name and last name include at least one charater
+    add Confirm password input. The input must be === to the input orignally put
+- Make passowords have a requirement. (i.e., 4+ charaters, or include number)
+    Use regex to preform this
 
-- Movie carasoul
-    - Make movies cycle through when clicking prev/next buttons
-    - Make movies responsive so when clicked
