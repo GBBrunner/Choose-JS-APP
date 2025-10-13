@@ -1,5 +1,7 @@
 ﻿// Import the API Access Token from env.js
 import { API_ACCESS_TOKEN } from './env.js';
+let userCheck = localStorage.getItem('priorUser');
+userCheck = JSON.parse(userCheck);
 
 // API configuration
 const API_OPTIONS = {
@@ -145,6 +147,10 @@ const createMovieCard = (movie, tileSize) => {
   }
 
   favBtn.onclick = (evt) => {
+    if (userCheck === null) {
+      alert('Please log in to add to favorites.');
+      return;
+    }
     evt.stopPropagation();
     // toggle favorite state and persist
     if (isFavorite(movie.id)) {

@@ -53,6 +53,7 @@ main .wrap .button #button2:hover {
 main .wrap .button .active {
   background-color: #3F51B5 !important;
   border: 10px solid #3F51B5 !important;
+  color: white;
 }
 main .wrap .forms {
   position: relative;
