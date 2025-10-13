@@ -198,7 +198,13 @@ async function createCarousel(url, title = '', isSearch = false, tileSize = 200)
 async function fetchCertification(movieId) {
     // Basic guard clauses
     if (!movieId) return;                      // nothing to do for falsy id
-    if (certCache.has(movieId)) return;        // already fetched/cached
+  // If we already have a cached value (including null), ensure the
+  // newly-rendered DOM element is updated. Previously this returned
+  // early and left the recreated card without its certification.
+  if (certCache.has(movieId)) {
+    updateCertElement(movieId, certCache.get(movieId));
+    return;
+  }
 
     try {
         // Fetch release date information for the movie
