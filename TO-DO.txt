@@ -23,6 +23,7 @@
     - Sign Out Button
     - Delete Account Button
     - (Optional) add option to add pfp
+    - make email lowercase
 - Validate that the first name and last name include at least one charater
     add Confirm password input. The input must be === to the input orignally put
 - Make passowords have a requirement. (i.e., 4+ charaters, or include number)

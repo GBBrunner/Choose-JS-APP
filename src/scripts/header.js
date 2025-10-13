@@ -8,18 +8,30 @@ function createHeader() {
     
     const title = document.createElement('a');
         title.href = "/index.html";
-        title.innerHTML = `<h1 class="text-3xl font-bold mb-4 text-white">Movies</h1>`;
+        title.innerHTML = `<h1 class="text-3xl font-bold mb-4 text-white">Home</h1>`;
     header.appendChild(title);
 
-    const searchInput = document.createElement('input');
-        searchInput.id = "searchInput";
-        searchInput.type = "text";
-        searchInput.placeholder = "Search all movies . . .";
-        searchInput.className = "border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-[30rem]";
-    header.appendChild(searchInput);
+    const searchInputDiv = document.createElement('div');
+        searchInputDiv.id = "searchDiv";
+    header.appendChild(searchInputDiv);
+
+    // const searchInput = document.createElement('input');
+    //     searchInput.id = "searchInput";
+    //     searchInput.type = "text";
+    //     searchInput.placeholder = "Search all movies . . .";
+    //     searchInput.className = "border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-[30rem]";
+    // header.appendChild(searchInput);
 
     const nav = document.createElement('nav');
         const ul = document.createElement('ul');
+            const TVShowsLink = document.createElement('a');
+                TVShowsLink.href = "/src/html/tv_shows.html";
+                TVShowsLink.className = "text-white hover:underline mx-2";
+                TVShowsLink.innerHTML = `
+                <span class="fa-solid fa-tv"></span>
+                <span>TV Shows</span>
+                `;
+            ul.appendChild(TVShowsLink);
             const favoritesLink = document.createElement('a');
                 favoritesLink.href = "/src/html/favorites.html";
                 favoritesLink.className = "text-white hover:underline mx-2";
