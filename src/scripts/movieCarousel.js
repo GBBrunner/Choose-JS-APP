@@ -357,5 +357,5 @@ function movieCarousel(url, title = '', tileSize = 200) {
     }
   });
 }
-
+export { favList, addToFavorites, removeFromFavorites };
 export { movieCarousel, URL };
