@@ -1,5 +1,5 @@
-// moveCarousel.js file handles the movie carousel functionality and API handling
-import {movieCarousel, URL} from './movieCarousel.js';
+// mediaCarousel.js file handles the media carousel functionality and API handling
+import {mediaCarousel, API_URLS} from './mediaCarousel.js';
 import {createHeader} from './header.js';
 
 // Create the header dynamically
@@ -7,9 +7,9 @@ createHeader();
 
 // Create multiple movie carousels
 // You can adjust the tileSize parameter to change the size of the movie cards in each carousel
-movieCarousel(URL.popular, 'Popular Movies', 200);
-movieCarousel(URL.upcoming, 'Upcoming Movies', 175);
-movieCarousel(URL.topRated, 'Top Rated Movies', 230);
+mediaCarousel(API_URLS.movie.popular, 'Popular Movies', 200);
+mediaCarousel(API_URLS.movie.upcoming, 'Upcoming Movies', 175);
+mediaCarousel(API_URLS.movie.topRated, 'Top Rated Movies', 230);
 
 addEventListener('DOMContentLoaded', () => {
     const searchDiv = document.getElementById('searchDiv');
