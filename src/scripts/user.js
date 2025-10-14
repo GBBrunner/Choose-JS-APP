@@ -1,6 +1,7 @@
-import { createHeader } from '/src/scripts/header.js';
+// import { createHeader } from '/src/scripts/header.js';
+import { currentList } from './login';
 document.addEventListener('DOMContentLoaded', () => {
-createHeader();
+
             
 // Add logout button functionality
 const logoutButton = document.getElementById('logoutButton');
@@ -11,3 +12,27 @@ if (logoutButton) {
     });
 }
 });
+const confirmRemovalButton = document.getElementById('removalButton');
+confirmRemovalButton.addEventListener('click', () => {
+    removeAccount(document.getElementById('RemovalEmail').value, document.getElementById('RemovalPassword').value);
+});
+function removeAccount(email, password) {
+    const rEmail = document.getElementById('RemovalEmail').value;
+    const rPassword = document.getElementById('RemovalPassword').value;
+    for (const user of currentList.list) {
+        if (user.email === rEmail) {
+            if (user.password === rPassword) {
+                localStorage.removeItem('priorUser');
+                const index = currentList.list.findIndex(u => u.email === rEmail);
+                currentList.list.splice(index, 1);
+                localStorage.setItem('myUserList', JSON.stringify(currentList.list));
+                window.location.href = '/index.html';
+                return;
+            } else {
+                alert('Password Incorrect');
+                return;
+            }
+        }
+    }
+    alert('Account does not exist');
+}

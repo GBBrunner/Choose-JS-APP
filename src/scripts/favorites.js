@@ -140,12 +140,17 @@ document.addEventListener('DOMContentLoaded', async () => {
 
   const { movies, tvShows } = await loadFavorites();
   container.innerHTML = '';
-
-  if (!movies.length && !tvShows.length) {
-    container.innerHTML = '<div class="text-center text-gray-500 w-full py-8 mt-6"><h2 class="text-2xl font-bold mb-2">No Favorites Yet</h2><p>Start adding favorites from the Movies or TV Shows pages!</p></div>';
+  let userCheck = localStorage.getItem('priorUser');
+  userCheck = JSON.parse(userCheck);
+  if (userCheck === null) {
+    container.innerHTML = '<div class="text-center text-indigo-800 w-full py-8 mt-6"><h2 class="text-4xl font-bold mb-2">Not Logged In</h2><p class="text-lg">Please log in to view and manage your favorites.</p></div>';
     return;
+  }else{
+    if (!movies.length && !tvShows.length) {
+      container.innerHTML = '<div class="text-center text-indigo-800 w-full py-8 mt-6"><h2 class="text-2xl font-bold mb-2">No Favorites Yet</h2><p>Start adding favorites from the Movies or TV Shows pages!</p></div>';
+      return;
+    }
   }
-
   if (movies.length) await createFavoritesCarousel(movies, 'Favorite Movies');
   if (tvShows.length) await createFavoritesCarousel(tvShows, 'Favorite TV Shows');
 });

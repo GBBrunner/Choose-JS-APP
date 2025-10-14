@@ -31,4 +31,4 @@ Once logged in it will redirect you to index.html and say "hello,<user>" instead
 ---------- FAVORITES PAGE ----------
 Once there is an account signed in it will let the user put titles on their favorites list.
 Favorites list can be seen on it's own carousel on a seperate page that you can navigate to in the header.
-If there is no account signed in, instead of adding to favorites list it will simply alert a message asking to sign in first
+If there is no account signed in, instead of adding to favorites list it will simply alert a message asking to sign in first. On the favorites page, if there is no account signed-in it will display a message prompting the user to sign in
