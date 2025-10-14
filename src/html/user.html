@@ -8,15 +8,29 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="/src/scripts/user.js" type="module" defer></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="/src/styles/modal.css" />
 
 </head>
 <body>
+    <div id="delete_user_modal" class="modal">
+        <form action="" class="h-[8rem] bg-white px-4 rounded-lg" >
+        <div class="close_button_container">
+            <button class="close_button bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-2 rounded-full transition-colors duration-150">
+                <span class="fa-solid fa-xmark"></span>
+            </button>
+        </div>
+        <h3>Please re-enter account details to delete account</h3>
+        <label for="RemovalEmail">Email</label>
+        <input type="email" id="RemovalEmail" class="border border-2">
+        <label for="RemovalPassword">Password</label>
+        <input type="password" id="RemovalPassword" class="border border-2">
+        <input id="removalButton" type="submit" class="border border-2 bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded transition-colors duration-150" value="Remove Account">
+    </form>
+    </div>
     <button id="logoutButton" class="bg-red-600 hover:bg-red-800 text-white font-bold py-2 px-4 rounded transition-colors duration-150">
         <span class="fa-solid fa-right-from-bracket mr-2"></span>
         <span>Log Out</span>
     </button>
-    <a href="/src/html/delete_user.html" class="bg-red-900 hover:bg-rose-950 text-white font-bold py-2 px-4 rounded transition-colors duration-150" >
-        <span>Delete User</span>
-    </a>
+    <button id="deleteAccountButton" class="bg-red-900 hover:bg-rose-950 text-white font-bold py-2 px-4 rounded transition-colors duration-150">Delete Account</button>
 </body>
 </html>
