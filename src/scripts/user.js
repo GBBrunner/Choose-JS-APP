@@ -18,6 +18,7 @@ deleteAccountButton.addEventListener('click', () => {
     const modal = document.getElementById('delete_user_modal');
     modal.style.display = 'flex';
 });
+
 const confirmRemovalButton = document.getElementById('removalButton');
 confirmRemovalButton.addEventListener('click', () => {
     removeAccount(document.getElementById('RemovalEmail').value, document.getElementById('RemovalPassword').value);

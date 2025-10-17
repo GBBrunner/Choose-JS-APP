@@ -1,5 +1,6 @@
 function createHeader() {
     // Check if user is logged in
+    let linkStyles ="text-white no-underline hover:underline hover:decoration-2 hover:decoration-white hover:underline-offset-5 mx-2 transition-all duration-150";
     let userCheck = localStorage.getItem('priorUser');
     userCheck = JSON.parse(userCheck);
 
@@ -26,7 +27,7 @@ function createHeader() {
         const ul = document.createElement('ul');
             const TVShowsLink = document.createElement('a');
                 TVShowsLink.href = "/src/html/tv_shows.html";
-                TVShowsLink.className = "text-white hover:underline mx-2";
+                TVShowsLink.className = linkStyles;
                 TVShowsLink.innerHTML = `
                 <span class="fa-solid fa-tv"></span>
                 <span>TV Shows</span>
@@ -34,7 +35,7 @@ function createHeader() {
             ul.appendChild(TVShowsLink);
             const favoritesLink = document.createElement('a');
                 favoritesLink.href = "/src/html/favorites.html";
-                favoritesLink.className = "text-white hover:underline mx-2";
+                favoritesLink.className = linkStyles;
                 favoritesLink.innerHTML = `
                 <span class="fa-solid fa-bookmark"></span>
                 <span>Favorites</span>
@@ -44,7 +45,7 @@ function createHeader() {
         if (userCheck === null) {
             const loginLink = document.createElement('a');
                 loginLink.href = "/src/html/login.html";
-                loginLink.className = "text-white no-underline hover:underline hover:decoration-2 hover:decoration-white hover:underline-offset-5 mx-2 transition-all duration-150";
+                loginLink.className = linkStyles;
                 loginLink.innerHTML = `
                 <span class="fa-solid fa-user rounded-full border border-white p-1"></span>
                 <span>Login/Sign Up</span>
@@ -53,7 +54,7 @@ function createHeader() {
         } else {
             const userPageLink = document.createElement('a');
                 userPageLink.href = "/src/html/user.html";
-                userPageLink.className = "text-white no-underline hover:underline hover:decoration-2 hover:decoration-white hover:underline-offset-5 mx-2 transition-all duration-150";
+                userPageLink.className = linkStyles;
                 userPageLink.innerHTML = `
                 <span class="fa-solid fa-user rounded-full border border-white p-1"></span>
                 <span>Hello, ${userCheck.firstName}</span>

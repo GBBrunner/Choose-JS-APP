@@ -1,9 +1,9 @@
 // mediaCarousel.js file handles the media carousel functionality and API handling
 import {mediaCarousel, API_URLS} from './mediaCarousel.js';
-import {createHeader} from './header.js';
+// import {createHeader} from './header.js';
 
 // Create the header dynamically
-createHeader();
+// createHeader();
 
 // Create multiple movie carousels
 // You can adjust the tileSize parameter to change the size of the movie cards in each carousel

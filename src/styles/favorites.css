@@ -1,0 +1,22 @@
+* {
+    margin: 0;
+    box-sizing: border-box;
+}
+.fav-list {
+    display: flex;
+    row-gap: 5px;
+    flex-direction: column;
+    width: 45%;
+}
+.favItem {
+    height: 120px;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid black;
+    padding: 0px 40px;
+}
+.favItem img{
+    height: 100px;
+}

@@ -1,9 +1,5 @@
 // TV shows page using mediaCarousel functionality with TV show API endpoints
 import {mediaCarousel, createCarousel, API_URLS} from './mediaCarousel.js';
-import {createHeader} from './header.js';
-
-// Create the header dynamically
-createHeader();
 
 // Store initial carousels configuration for restoring after search
 const initialCarousels = [
