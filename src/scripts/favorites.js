@@ -1,4 +1,6 @@
 import { createHeader } from './header.js';
+let userCheck = localStorage.getItem('priorUser');
+userCheck = JSON.parse(userCheck);
 
 // Helper functions for user-specific favorites
 export const getCurrentUser = () => {
@@ -8,6 +10,7 @@ export const getCurrentUser = () => {
     return null;
   }
 };
+
 export const getUserFavoritesKey = () => {
   const user = getCurrentUser();
   return user ? `favorites_${user.email}` : null;
@@ -73,45 +76,92 @@ export const removeFromFavorites = (mediaId) => {
   }
 };
 
-// Get stored favorites (user-specific)
-const storedFavorites = getUserFavorites();
-const parsedFavorites = storedFavorites;
+// Simple renderer to draw both Movies and TV sections
+function renderFavoritesSections() {
+  const allFavs = getUserFavorites();
+  // Backward compatibility: default missing media_type to 'movie'
+  const movies = allFavs.filter((f) => (f?.media_type || 'movie') === 'movie');
+  const tvShows = allFavs.filter((f) => (f?.media_type || 'movie') === 'tv');
 
-document.addEventListener('DOMContentLoaded', async() => {
-    // Create the header dynamically
-    createHeader();
-    // Display the list of favorite movies
-    const main = document.getElementById('favorites-container');
-    if (!main) {
-        console.error('favorites-container not found');
-        return;
+  const favContainer = document.getElementById('favorites-container');
+  const moviesContainer = document.getElementById('favorite-movies-container');
+  const tvContainer = document.getElementById('favorite-tv-container');
+  if (!moviesContainer || !tvContainer) {
+    console.error('Favorites containers not found');
+    return;
+  }
+
+  // Clear existing
+  moviesContainer.innerHTML = '';
+  tvContainer.innerHTML = '';
+
+
+  // Movies section
+  if (userCheck === null) {
+    favContainer.innerHTML = '<div class="text-center text-indigo-800 w-full py-8 mt-6"><h2 class="text-2xl font-bold mb-2">Please Log In</h2><p>You must be logged in to view your favorites.</p></div>';
+    return;
+  }
+  if (!movies.length && !tvShows.length) {
+    const emptyHtml = '<div class="text-center text-indigo-800 w-full py-8 mt-6"><h2 class="text-2xl font-bold mb-2">No Favorites Yet</h2><p>Start adding favorites from the Movies or TV Shows pages!</p></div>';
+    if (favContainer) {
+      favContainer.innerHTML = emptyHtml;
+    } else if (moviesContainer) {
+      moviesContainer.innerHTML = emptyHtml;
     }
-    const myFavWrap = new favDisplay(parsedFavorites || []);
-    myFavWrap.render(main);
-    createFavMovies(myFavWrap);
+    return;
+  }
+
+  const setDisplay = (container, arr) =>
+    (container.style.display = (arr && arr.length) ? 'flex' : 'none');
+
+  setDisplay(moviesContainer, movies);
+  setDisplay(tvContainer, tvShows);
+
+  // Movies section
+  const moviesWrap = new favDisplay(movies || [], 'Your Favorite Movies');
+  moviesWrap.render(moviesContainer);
+  createFavMovies(moviesWrap);
+
+  // TV section
+  const tvWrap = new favDisplay(tvShows || [], 'Your Favorite TV Shows');
+  tvWrap.render(tvContainer);
+  createFavMovies(tvWrap);
+}
+
+document.addEventListener('DOMContentLoaded', async () => {
+  // Create the header dynamically
+  createHeader();
+  // Initial render
+  renderFavoritesSections();
+});
+
+// Re-render when favorites are updated elsewhere in the app
+window.addEventListener('favoritesUpdated', () => {
+  renderFavoritesSections();
 });
 
 class favDisplay {
-    constructor(list) {
-        this.list = list || [];
-    }
-    render(main) {
-        this.container = document.createElement('div');
-        this.container.classList.add('fav-list');
-        this.container.innerHTML = `
-            <h1>Your Favorite Movies</h1>
-        `;
-        main.appendChild(this.container);
-        return this.container;
-    }
+  constructor(list, headingText = 'Your Favorites') {
+    this.list = list || [];
+    this.headingText = headingText;
+  }
+  render(main) {
+    this.container = document.createElement('div');
+    this.container.classList.add('fav-list');
+    this.container.innerHTML = `
+      <h1>${this.headingText}</h1>
+    `;
+    main.appendChild(this.container);
+    return this.container;
+  }
 
-    add(data) {
-        this.list.unshift(data);
-        const key = getUserFavoritesKey();
-        if (key) {
-            localStorage.setItem(key, JSON.stringify(this.list));
-        }
+  add(data) {
+    this.list.unshift(data);
+    const key = getUserFavoritesKey();
+    if (key) {
+      localStorage.setItem(key, JSON.stringify(this.list));
     }
+  }
 }
 
 class favoriteMovie {
@@ -124,10 +174,26 @@ class favoriteMovie {
         const favItem = document.createElement('div');
         favItem.classList.add('favItem');
         favItem.innerHTML = `
-            <img src="${this.poster}" alt="movie image">
-            <h2>${this.title}</h2>
-            <p>${this.id}</p>
+            <div class="flex flex-nowrap justify-between">
+              <img src="${this.poster}" alt="movie image">
+              <div class="flex flex-col justify-center px-4">
+                <p class="text-xs px-2">TMBD ID:${this.id}</p>
+                <h2 class="text-lg font-bold">${this.title}</h2>
+              </div>
+              
+            </div>
+            <i class="fas fa-trash text-xl cursor-pointer hover:text-red-900 removeFav" title="Remove from favorites"></i>
         `;
+
+        // Attach remove handler (reuses removeFromFavorites from this module)
+        const removeBtn = favItem.querySelector('.removeFav');
+        if (removeBtn) {
+          removeBtn.addEventListener('click', (evt) => {
+            evt.stopPropagation();
+            // remove by id; favoritesUpdated event will trigger re-render
+            removeFromFavorites(this.id);
+          });
+        }
         return favItem;
     }
 }

@@ -9,7 +9,7 @@ function createHeader() {
     
     const title = document.createElement('a');
         title.href = "/index.html";
-        title.innerHTML = `<h1 class="text-3xl font-bold mb-4 text-white">Home</h1>`;
+        title.innerHTML = `<h1 class="text-3xl font-bold mb-4 text-white">Logo and title</h1>`;
     header.appendChild(title);
 
     const searchInputDiv = document.createElement('div');
@@ -25,6 +25,14 @@ function createHeader() {
 
     const nav = document.createElement('nav');
         const ul = document.createElement('ul');
+            const homeLink = document.createElement('a');
+                homeLink.href = "/index.html";
+                homeLink.className = linkStyles;
+                homeLink.innerHTML = `
+                <span class="fa-solid fa-house"></span>
+                <span>Home</span>
+                `;
+            ul.appendChild(homeLink);
             const TVShowsLink = document.createElement('a');
                 TVShowsLink.href = "/src/html/tv_shows.html";
                 TVShowsLink.className = linkStyles;

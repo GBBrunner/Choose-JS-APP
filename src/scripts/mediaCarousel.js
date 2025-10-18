@@ -141,7 +141,6 @@ const createMediaCard = (media, tileSize, mediaType = 'movie', carouselId) => {
   card.querySelector('.flex.items-center.gap-2.mt-1').appendChild(favBtn);
   return card;
 };
-
 // --- Carousel Core Logic ---
 async function createCarousel(url, title = '', isSearch = false, tileSize = 200) {
   const container = document.getElementById('carousels-container');

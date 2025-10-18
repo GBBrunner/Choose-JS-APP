@@ -4,9 +4,11 @@
 }
 .fav-list {
     display: flex;
+    flex-grow: 1;
     row-gap: 5px;
     flex-direction: column;
-    width: 45%;
+    margin:0 3rem;
+    width:full;
 }
 .favItem {
     height: 120px;
