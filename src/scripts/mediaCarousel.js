@@ -15,6 +15,7 @@ const API_OPTIONS = {
 };
 
 const API_URLS = {
+  search: 'https://api.themoviedb.org/3/search/collection?include_adult=false&language=en-US&page=1',
   movie: {
     search: 'https://api.themoviedb.org/3/search/movie?language=en-US&page=1&query=',
     popular: 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1',
@@ -80,7 +81,7 @@ const createMediaCard = (media, tileSize, mediaType = 'movie', carouselId) => {
   const imgHeight = Math.floor(imgWidth * 1.5);
   const cardHeight = Math.floor(tileSize * 2);
   const padding = scaledSize(16);
-  const fontSizes = { title: scaledSize(14, 10), year: scaledSize(12), rating: scaledSize(12), cert: scaledSize(10) };
+  const fontSizes = { title: scaledSize(14, 10), year: scaledSize(12), rating: scaledSize(12) };
   
   const blankImage = '/src/images/blank_thumbnail.png';
   const imgSrc = media.poster_path ? `https://image.tmdb.org/t/p/w500${media.poster_path}` : blankImage;
@@ -102,42 +103,41 @@ const createMediaCard = (media, tileSize, mediaType = 'movie', carouselId) => {
     </a>
     <div class="flex items-center gap-2 mt-1">
       <span class="bg-yellow-200 text-yellow-800 text-[${fontSizes.rating}px] px-2 py-1 rounded-md">★ ${rating}</span>
-      <span id="cert-${carouselId}-${media.id}" class="hidden bg-blue-100 text-blue-800 text-[${fontSizes.cert}px] px-2 py-0.5 rounded-md" title="Content rating">Rated: —</span>
     </div>
   `;
   // Favorite button
   const favBtn = document.createElement('button');
-  favBtn.className = "fa-solid fa-heart";
-  favBtn.type = 'button';
-  favBtn.title = 'Add to favorites';
-  favBtn.style.fontSize = `${scaledSize(18)}px`;
-  favBtn.style.cursor = 'pointer';
+    favBtn.className = "fa-solid fa-heart";
+    favBtn.type = 'button';
+    favBtn.title = 'Add to favorites';
+    favBtn.style.fontSize = `${scaledSize(18)}px`;
+    favBtn.style.cursor = 'pointer';
   // set initial color based on stored favorites
-  try {
-    favBtn.style.color = isFavorite(media.id) ? 'red' : 'black';
-    favBtn.setAttribute('aria-pressed', isFavorite(media.id) ? 'true' : 'false');
-  } catch (e) {
-    favBtn.style.color = 'black';
-  }
-
-  favBtn.onclick = (evt) => {
-    const currentUser = getCurrentUser();
-    if (currentUser === null) {
-      alert('Please log in to add to favorites.');
-      return;
-    }
-    evt.stopPropagation();
-    // toggle favorite state and persist
-    if (isFavorite(media.id)) {
-      removeFromFavorites(media.id);
+    try {
+      favBtn.style.color = isFavorite(media.id) ? 'red' : 'black';
+      favBtn.setAttribute('aria-pressed', isFavorite(media.id) ? 'true' : 'false');
+    } catch (err) {
       favBtn.style.color = 'black';
-      favBtn.setAttribute('aria-pressed', 'false');
-    } else {
-      addToFavorites(media, mediaType);
-      favBtn.style.color = 'red';
-      favBtn.setAttribute('aria-pressed', 'true');
     }
-  };
+
+    favBtn.onclick = (evt) => {
+      const currentUser = getCurrentUser();
+      if (currentUser === null) {
+        alert('Please log in to add to favorites.');
+        return;
+      }
+      evt.stopPropagation();
+      // toggle favorite state and persist
+      if (isFavorite(media.id)) {
+        removeFromFavorites(media.id);
+        favBtn.style.color = 'black';
+        favBtn.setAttribute('aria-pressed', 'false');
+      } else {
+        addToFavorites(media, mediaType);
+        favBtn.style.color = 'red';
+        favBtn.setAttribute('aria-pressed', 'true');
+      }
+    };
   card.querySelector('.flex.items-center.gap-2.mt-1').appendChild(favBtn);
   return card;
 };
@@ -159,104 +159,14 @@ async function createCarousel(url, title = '', isSearch = false, tileSize = 200)
   let mediaItems = [];
   let currentIndex = 0;
   let isAnimating = false;
-  const certCache = new Map();
+  // Removed certification cache and related logic
 
   const getVisibleCount = () => {
     const gap = parseInt(getComputedStyle(strip).gap) || 0;
     return Math.max(1, Math.floor((wrapper.clientWidth + gap) / (tileSize + gap)));
   };
 
-async function fetchCertification(mediaId, carouselId) {
-    // Basic guard clauses
-    if (!mediaId) return;                      // nothing to do for falsy id
-  // If we already have a cached value (including null), ensure the
-  // newly-rendered DOM element is updated. Previously this returned
-  // early and left the recreated card without its certification.
-  if (certCache.has(mediaId)) {
-    updateCertElement(mediaId, certCache.get(mediaId), carouselId);
-    return;
-  }
-
-    try {
-        // Fetch release date information for movie or TV show
-        const certUrl = isTVShow 
-          ? `https://api.themoviedb.org/3/tv/${mediaId}/content_ratings`
-          : `https://api.themoviedb.org/3/movie/${mediaId}/release_dates`;
-        const data = await fetchJson(certUrl);
-
-        let certification = null;
-
-        if (isTVShow) {
-            // TV shows have a simpler structure
-            if (data && Array.isArray(data.results)) {
-                // Look for US rating first
-                const usRating = data.results.find(r => r.iso_3166_1 === 'US');
-                certification = usRating?.rating || data.results[0]?.rating || null;
-            }
-        } else {
-            // Movies - existing logic
-            // If the shape of the response is unexpected, cache null and exit
-      if (!data || !Array.isArray(data.results)) {
-        certCache.set(mediaId, null);
-        updateCertElement(mediaId, null, carouselId);
-        return;
-      }
-
-            // Look for a US entry first
-            const usEntry = data.results.find(entry => entry.iso_3166_1 === 'US');
-
-            // Try to find a certification inside an entry's release_dates
-            const certFromUs = findFirstCertification(usEntry);
-            const certFromAny = certFromUs || findFirstCertificationInAll(data.results);
-
-            // Cache the found certification (or null if none)
-            certification = certFromAny || null;
-        }
-
-    certCache.set(mediaId, certification);
-
-    // Update the DOM to show (or hide) the certification
-    updateCertElement(mediaId, certification, carouselId);
-    } catch (err) {
-        // Fail gracefully: cache null and log error (silently for expected missing data)
-    certCache.set(mediaId, null);
-    updateCertElement(mediaId, null, carouselId);
-    }
-}
-// Helper: return the first non-empty certification inside a single country entry
-function findFirstCertification(countryEntry) {
-  if (!countryEntry || !Array.isArray(countryEntry.release_dates)) return null;
-  for (const releaseDate of countryEntry.release_dates) {
-    if (releaseDate && releaseDate.certification) return releaseDate.certification;
-  }
-  return null;
-}
-
-// Helper: scan all country entries until a certification is found
-function findFirstCertificationInAll(results) {
-  for (const entry of results) {
-    const cert = findFirstCertification(entry);
-    if (cert) return cert;
-  }
-  return null;
-}
-
-// Helper: update the DOM element with id `cert-{mediaId}`
-function updateCertElement(mediaId, certification, carouselId) {
-  const elem = document.getElementById(`cert-${carouselId}-${mediaId}`);
-  if (!elem) {
-    console.warn(`Certification element not found for media ID: ${mediaId}`);
-    return;
-  }
-  if (certification) {
-    elem.textContent = `Rated: ${certification}`;
-    elem.classList.remove('hidden');
-  } else {
-    // hide or clear if no certification (title may not have rating data in TMDB)
-    elem.textContent = '';
-    elem.classList.add('hidden');
-  }
-}
+// Removed certification fetching and helper functions
 
   const render = async () => {
     if (!mediaItems.length) {
@@ -278,13 +188,6 @@ function updateCertElement(mediaId, certification, carouselId) {
     visibleMedia.forEach(media => {
       strip.appendChild(createMediaCard(media, tileSize, isTVShow ? 'tv' : 'movie', carouselId));
     });
-    
-    // Fetch certifications after DOM elements are rendered
-    // Wait for next event loop to ensure DOM is painted
-    await new Promise(resolve => setTimeout(resolve, 0));
-    
-    // Fetch all certifications in parallel (pass carouselId so update targets correct element)
-    await Promise.all(visibleMedia.map(media => fetchCertification(media.id, carouselId)));
   };
 
   const slide = (direction) => {
@@ -358,4 +261,8 @@ document.addEventListener('DOMContentLoaded', async () => {
   isSearchHandlerAttached = true;
 });
 
-export { mediaCarousel, createCarousel, API_URLS, API_OPTIONS, fetchJson };
+// export { mediaCarousel, createCarousel, API_URLS, API_OPTIONS, fetchJson };
+// Exports for functional use in other modules
+export { mediaCarousel, createCarousel, API_URLS, API_OPTIONS, fetchJson};
+// Exports for Jasmine tests
+export default{createCarouselShell, createMediaCard};
