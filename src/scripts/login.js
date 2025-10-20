@@ -1,10 +1,11 @@
-import {createHeader} from './header.js';
+import {createHeader, createFooter} from './header.js';
 
 let currentList;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Create the header dynamically
     createHeader();
+    createFooter();
     
     let checkList = JSON.parse(localStorage.getItem('myUserList'));
 
@@ -65,37 +66,30 @@ class User {
         }));
     }
 }
-function logNewUser(first, last, email, password) {
-    const checkThisUser = new User(first, last, email, password);
-    for (const user of currentList.list) {
-        if (user.email === checkThisUser.email) {
-            alert('A user with this email already exists');
-            return;
-        }
+const logNewUser = (first, last, email, password) => {
+    if (currentList.list.some(user => user.email === email)) {
+        alert('A user with this email already exists');
+        return;
     }
-    const currentUser = checkThisUser;
+    const currentUser = new User(first, last, email, password);
     currentUser.save();
-    currentList.add(currentUser)
+    currentList.add(currentUser);
     location.reload();
-}
+};
 
-function logIn(email, password) {
-    for (const user of currentList.list) {
-        if (user.email === email) {
-            if (user.password === password) {
-                const currentUser = new User(user.firstName, user.lastName, user.email, user.password);
-                currentUser.save();
-                // location.reload();
-                window.location.href = '/index.html';
-                return;
-            } else {
-                alert('Password Incorrect');
-                return;
-            }
-        }
+const logIn = (email, password) => {
+    const user = currentList.list.find(user => user.email === email);
+    if (!user) {
+        alert('Account does not exist');
+        return;
     }
-    alert('Account does not exist');
-}
+    if (user.password !== password) {
+        alert('Password Incorrect');
+        return;
+    }
+    new User(user.firstName, user.lastName, user.email, user.password).save();
+    window.location.href = '/index.html';
+};
 // button code for switching between login and signup forms
 document.addEventListener('DOMContentLoaded', () => {
     const button1 = document.getElementById('button1');

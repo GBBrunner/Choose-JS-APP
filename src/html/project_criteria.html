@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/src/styles/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" defer>
+    import { createHeader, createFooter } from '/src/scripts/header.js';
+    document.addEventListener('DOMContentLoaded', () => {
+        createHeader();
+        createFooter();
+    });
+  </script>
+</head>
+<body>
+    <div class="max-w-5xl mx-auto p-8 space-y-12 text-gray-800">
+  <!-- Header -->
+  <header class="text-center space-y-2">
+    <h1 class="text-4xl font-bold text-indigo-600">🎯 Project Purpose & Overview</h1>
+    <p class="text-lg text-gray-600">Build a real-world, collaborative web application that demonstrates your coding, design, and teamwork skills.</p>
+  </header>
+
+  <!-- Purpose -->
+  <section class="bg-gray-50 rounded-2xl p-6 shadow-sm">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Purpose</h2>
+    <p class="text-gray-700 mb-4">The purpose of this project is twofold:</p>
+    <ul class="list-disc pl-6 space-y-2 text-gray-700">
+      <li>Choose one project option to complete.</li>
+      <li>Build a comprehensive, real-world application that enhances your coding skills and strengthens your portfolio.</li>
+      <li>Gain experience working collaboratively in a team environment — mirroring real-world developer practices and teamwork dynamics.</li>
+    </ul>
+  </section>
+
+  <!-- Project Ideas -->
+  <section class="bg-white rounded-2xl p-6 shadow-sm border">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Project Ideas</h2>
+    <p class="mb-4 text-gray-700">Choose <strong>one</strong> of the following project options:</p>
+    <ul class="space-y-3">
+      <li>
+        <h3 class="text-lg font-semibold text-gray-800">🎬 Movie App</h3>
+        <p class="text-gray-600">A platform for browsing, searching, and managing a collection of movies.</p>
+      </li>
+      <li>
+        <h3 class="text-lg font-semibold text-gray-800">🧠 Flashcard or Trivia App</h3>
+        <p class="text-gray-600">A learning or quiz-based tool for practicing through flashcards or trivia questions.</p>
+      </li>
+      <li>
+        <h3 class="text-lg font-semibold text-gray-800">💰 Income and Expenses App</h3>
+        <p class="text-gray-600">A financial tracker that helps log, analyze, and manage income and spending patterns.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Minimum Requirements -->
+  <section class="bg-gray-50 rounded-2xl p-6 shadow-sm">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Minimum Requirements</h2>
+    <p class="mb-3 text-gray-700">Each project must include the following:</p>
+    <ul class="list-disc pl-6 space-y-2 text-gray-700">
+      <li>A fully functional browser-based app.</li>
+      <li>An intuitive, mobile-first responsive UI.</li>
+      <li>Meaningful functionality that provides value to users.</li>
+      <li>Data persistence using Local Storage or Firebase.</li>
+      <li>Integration of at least one external library.</li>
+      <li>A GitHub repository with clear version control history.</li>
+      <li>A <code>README.md</code> with setup and usage instructions.</li>
+      <li>Unit and integration tests for at least one feature each.</li>
+    </ul>
+  </section>
+
+  <!-- Required Features -->
+  <section class="bg-white rounded-2xl p-6 shadow-sm border">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-700">App Features (Choose 5+)</h2>
+    <ul class="list-disc pl-6 space-y-2 text-gray-700">
+      <li>User authentication (login/register).</li>
+      <li>Persistent data storage (Local Storage or Firebase).</li>
+      <li>Responsive, mobile-first design.</li>
+      <li>Interactive page with multiple components.</li>
+      <li>Display, filter, and sort stored data.</li>
+      <li>CRUD operations (Create, Read, Update, Delete).</li>
+      <li>Data export options (e.g., JSON file).</li>
+      <li>Feature testing and validation.</li>
+    </ul>
+  </section>
+
+  <!-- Project Workflow -->
+  <section class="bg-gray-50 rounded-2xl p-6 shadow-sm">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Project Workflow</h2>
+
+    <!-- Step 1 -->
+    <div class="mb-6">
+      <h3 class="text-xl font-semibold text-gray-800">Step 1: Planning</h3>
+      <ul class="list-disc pl-6 space-y-1 text-gray-700">
+        <li>Work individually or in pairs (max 2 members).</li>
+        <li>Select your project idea and define sprint goals.</li>
+        <li>Outline key features for the first sprint.</li>
+      </ul>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="mb-6">
+      <h3 class="text-xl font-semibold text-gray-800">Step 2: Setup</h3>
+      <ul class="list-disc pl-6 space-y-1 text-gray-700">
+        <li>Choose a UI framework: Bootstrap, Material, Ionic, or custom CSS.</li>
+        <li>Initialize a GitHub repository and use branching for individual tasks.</li>
+        <li>Create a Kanban board (e.g., Trello or GitHub Issues) to track progress.</li>
+        <li>Agree on a code style guide and naming conventions.</li>
+        <li>Set up CI (Continuous Integration) for automated testing/deployment.</li>
+      </ul>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="mb-6">
+      <h3 class="text-xl font-semibold text-gray-800">Step 3: Development</h3>
+      <ul class="list-disc pl-6 space-y-1 text-gray-700">
+        <li><strong>Sprint 1:</strong> Build core functionality — UI, data persistence, and main features.</li>
+        <li><strong>Sprint 2:</strong> Add advanced features — filtering, sorting, exports, and testing.</li>
+        <li>Perform peer code reviews for quality assurance.</li>
+      </ul>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="mb-6">
+      <h3 class="text-xl font-semibold text-gray-800">Step 4: Finalization</h3>
+      <ul class="list-disc pl-6 space-y-1 text-gray-700">
+        <li>Complete, test, and document all planned features.</li>
+        <li>Prepare a presentation showcasing:
+          <ul class="list-circle pl-6 mt-1 space-y-1">
+            <li>App purpose and core functionality.</li>
+            <li>Screenshots or live demo.</li>
+            <li>Challenges and solutions implemented.</li>
+          </ul>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Step 5 -->
+    <div>
+      <h3 class="text-xl font-semibold text-gray-800">Step 5: Submission</h3>
+      <ul class="list-disc pl-6 space-y-1 text-gray-700">
+        <li>Upload the final project and documentation to GitHub.</li>
+        <li>Post your GitHub repo link in the assignment submission portal.</li>
+        <li>Share your private repo with <strong>MountainlandATC</strong>.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Important Items -->
+  <section class="bg-white rounded-2xl p-6 shadow-sm border">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Important Project Elements</h2>
+
+    <!-- Team -->
+    <div class="mb-4">
+      <h3 class="text-xl font-semibold text-gray-800 mb-1">👥 Project Team</h3>
+      <p class="text-gray-700">Teams should include diverse skill sets — project managers, developers, designers, and other stakeholders — to ensure smooth execution and comprehensive coverage of project needs.</p>
+    </div>
+
+    <!-- Idea Kickoff -->
+    <div class="mb-4">
+      <h3 class="text-xl font-semibold text-gray-800 mb-1">🚀 Idea Kickoff</h3>
+      <p class="text-gray-700">Start with brainstorming, discussion, and research. Define your goals, analyze the target audience, and assess competitors to establish a strong project foundation.</p>
+    </div>
+
+    <!-- Sprint 1 -->
+    <div class="mb-4">
+      <h3 class="text-xl font-semibold text-gray-800 mb-1">🏗️ Sprint 1</h3>
+      <p class="text-gray-700">Focus on core development — UI layout, data handling, and key features. Identify potential risks early and document progress.</p>
+    </div>
+
+    <!-- Sprint 2 -->
+    <div class="mb-4">
+      <h3 class="text-xl font-semibold text-gray-800 mb-1">🔍 Sprint 2</h3>
+      <p class="text-gray-700">Refine and test the product. Conduct usability testing and implement improvements based on feedback.</p>
+    </div>
+
+    <!-- Product Complete -->
+    <div class="mb-4">
+      <h3 class="text-xl font-semibold text-gray-800 mb-1">✅ Product Complete</h3>
+      <p class="text-gray-700">Ensure all planned features are implemented, tested, and documented. Verify that the product meets quality standards.</p>
+    </div>
+
+    <!-- Presentation -->
+    <div class="mb-4">
+      <h3 class="text-xl font-semibold text-gray-800 mb-1">🖥️ Prepare and Present</h3>
+      <p class="text-gray-700">Create a presentation demonstrating your app’s purpose, UI, and functionality. Include screenshots and examples of real use cases.</p>
+    </div>
+
+    <!-- Upload -->
+    <div>
+      <h3 class="text-xl font-semibold text-gray-800 mb-1">⬆️ Upload & Finalize</h3>
+      <p class="text-gray-700">Upload the final product and presentation to GitHub, make final checks, and ensure everything aligns with project requirements.</p>
+    </div>
+  </section>
+
+  <!-- Submission -->
+  <section class="bg-gray-50 rounded-2xl p-6 shadow-sm">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Submission</h2>
+    <ol class="list-decimal pl-6 space-y-2 text-gray-700">
+      <li>Each team member must comment on the assignment with their GitHub repository link.</li>
+      <li>Share your private repository with <strong>MountainlandATC</strong>.</li>
+    </ol>
+  </section>
+
+  <!-- Documentation -->
+  <section class="bg-white rounded-2xl p-6 shadow-sm border">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Documentation Options</h2>
+    <ul class="list-disc pl-6 text-gray-700 space-y-1">
+      <li><strong>Option 1:</strong> Movie App</li>
+      <li><strong>Option 2:</strong> Trivia App</li>
+      <li><strong>Option 3:</strong> Income & Expenses App</li>
+    </ul>
+    <p class="mt-3 text-gray-700">Refer to the <a href="#" class="text-indigo-600 underline">Project Description and Rubric (Google Doc)</a> for evaluation criteria and grading guidelines.</p>
+  </section>
+</div>
+</body>
+</html>

@@ -1,6 +1,7 @@
-import {createHeader} from './header.js';
+import {createHeader, createFooter} from './header.js';
 
 document.addEventListener('DOMContentLoaded', () => {
     // Create the header dynamically
     createHeader();
+    createFooter();
 });

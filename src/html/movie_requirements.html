@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="/src/styles/style.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script type="module" defer>
+    import { createHeader, createFooter } from '/src/scripts/header.js';
+    document.addEventListener('DOMContentLoaded', () => {
+        createHeader();
+        createFooter();
+    });
+  </script>
+</head>
+<body>
+    
+</body>
+</html>
+<div class="max-w-5xl mx-auto p-8 space-y-12 text-gray-800">
+  <!-- Header -->
+  <header class="text-center space-y-2">
+    <h1 class="text-4xl font-bold text-indigo-600">🎬 Movie App</h1>
+    <p class="text-lg text-gray-600">A dynamic web app for discovering, saving, and reviewing movies.</p>
+  </header>
+
+  <!-- General Requirements -->
+  <section class="bg-gray-50 rounded-2xl p-6 shadow-sm">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-700">General Requirements</h2>
+    <ul class="list-disc pl-6 space-y-2">
+      <li><strong>Code Structure:</strong> Use modular code — separate API calls, DOM manipulation, and utilities into dedicated files.</li>
+      <li><strong>Bug-Free Experience:</strong> No critical bugs and up to three minor ones allowed.</li>
+      <li><strong>Version Control:</strong> Commit daily to GitHub with meaningful messages.</li>
+      <li><strong>Deployment:</strong> Publish on GitHub Pages, Netlify, or Vercel.</li>
+    </ul>
+  </section>
+
+  <!-- Purpose -->
+  <section class="bg-white rounded-2xl p-6 shadow-sm border">
+    <h2 class="text-2xl font-semibold mb-3 text-indigo-700">Purpose</h2>
+    <p>The Movie App allows users to search for movies, view details, and save, rate, and comment on their favorites.</p>
+  </section>
+
+  <!-- Pages & Navigation -->
+  <section class="bg-gray-50 rounded-2xl p-6 shadow-sm">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Pages & Navigation</h2>
+
+    <!-- Page 1 -->
+    <div class="mb-6">
+      <h3 class="text-xl font-semibold text-gray-800">1️⃣ Welcome / Search Page</h3>
+      <p class="text-gray-600 mb-2">Provides a starting point for users to search and explore movies.</p>
+      <ul class="list-disc pl-6 space-y-1">
+        <li>Search bar for entering a movie title.</li>
+        <li>“Saved Movies” link to access saved list.</li>
+        <li>Displays popular movies with posters, titles, and ratings.</li>
+        <li>Replaces “Popular” section with search results dynamically.</li>
+        <li>Clicking a movie navigates to its details page.</li>
+      </ul>
+    </div>
+
+    <!-- Page 2 -->
+    <div class="mb-6">
+      <h3 class="text-xl font-semibold text-gray-800">2️⃣ Movie Details Page</h3>
+      <p class="text-gray-600 mb-2">Displays comprehensive details about a selected movie.</p>
+      <ul class="list-disc pl-6 space-y-1">
+        <li>Fetch and display title, description, release date, genre, runtime, and cast.</li>
+        <li>Show trailers (e.g., YouTube embeds) if available.</li>
+        <li>Allow users to save, rate, and comment on the movie.</li>
+        <li>Ratings/comments automatically save the movie.</li>
+        <li>Include navigation back to the Search Page.</li>
+      </ul>
+    </div>
+
+    <!-- Page 3 -->
+    <div>
+      <h3 class="text-xl font-semibold text-gray-800">3️⃣ Saved Movies Page</h3>
+      <p class="text-gray-600 mb-2">Allows users to manage and revisit their saved movies.</p>
+      <ul class="list-disc pl-6 space-y-1">
+        <li>Display a list of saved movies (titles/posters).</li>
+        <li>Clicking opens the details page.</li>
+        <li>Include navigation back to Search Page.</li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Setup Instructions -->
+  <section class="bg-white rounded-2xl p-6 shadow-sm border">
+    <h2 class="text-2xl font-semibold mb-3 text-indigo-700">Setup Instructions</h2>
+    <ol class="list-decimal pl-6 space-y-1 text-gray-700">
+      <li>Go to <a href="https://www.themoviedb.org/" class="text-indigo-600 underline">The Movie Database (TMDB)</a>.</li>
+      <li>Sign up and obtain your API key under <em>Settings → API</em>.</li>
+      <li>Reference: <a href="https://developers.themoviedb.org/3/movies/get-movie-details" class="text-indigo-600 underline">Movie API Docs</a>.</li>
+    </ol>
+
+    <div class="mt-4">
+      <h3 class="font-semibold text-gray-800 mb-2">Example Endpoints:</h3>
+      <ul class="text-sm bg-gray-100 rounded-lg p-3 font-mono space-y-1 overflow-x-auto">
+        <li>Search by title: <code>https://api.themoviedb.org/3/search/movie?api_key=YOUR_KEY&query=Harry%20Potter</code></li>
+        <li>Get movie by ID: <code>https://api.themoviedb.org/3/movie/MovieIdHere?api_key=YOUR_KEY</code></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Page Tasks -->
+  <section class="bg-gray-50 rounded-2xl p-6 shadow-sm">
+    <h2 class="text-2xl font-semibold mb-4 text-indigo-700">Page Tasks</h2>
+    <div class="grid md:grid-cols-3 gap-6">
+      <div>
+        <h3 class="font-semibold text-gray-800 mb-2">Welcome / Search Page</h3>
+        <ul class="list-disc pl-6 text-gray-700 space-y-1">
+          <li>Fetch and display popular movies.</li>
+          <li>Implement a working search bar.</li>
+          <li>Dynamic UI for posters and titles.</li>
+          <li>Clickable movies navigate to details.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-800 mb-2">Movie Details Page</h3>
+        <ul class="list-disc pl-6 text-gray-700 space-y-1">
+          <li>Fetch full movie details.</li>
+          <li>Embed trailers (YouTube).</li>
+          <li>Add save, rate, and comment features.</li>
+          <li>Persist data via Local Storage or Firebase.</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="font-semibold text-gray-800 mb-2">Saved Movies Page</h3>
+        <ul class="list-disc pl-6 text-gray-700 space-y-1">
+          <li>Show list of saved movies.</li>
+          <li>Navigate to details page.</li>
+          <li>Back button to Search Page.</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <!-- Best Practices -->
+  <section class="bg-white rounded-2xl p-6 shadow-sm border">
+    <h2 class="text-2xl font-semibold mb-3 text-indigo-700">Best Practices</h2>
+    <ul class="list-disc pl-6 space-y-1 text-gray-700">
+      <li>Use <code>async/await</code> for API interactions.</li>
+      <li>Optimize API calls and cache results where possible.</li>
+      <li>Ensure responsive design (Tailwind or other CSS frameworks).</li>
+      <li>Modularize code and use reusable components.</li>
+    </ul>
+  </section>
+
+  <!-- Stretch Goals -->
+  <section class="bg-gray-50 rounded-2xl p-6 shadow-sm">
+    <h2 class="text-2xl font-semibold mb-3 text-indigo-700">Stretch Goals</h2>
+    <ul class="list-disc pl-6 space-y-1 text-gray-700">
+      <li>Filter by genre, year, or rating.</li>
+      <li>Sort by popularity, rating, or alphabetical order.</li>
+      <li>Mark favorites and create a favorites list.</li>
+      <li>Implement pagination for results and saved movies.</li>
+      <li>Add light/dark mode toggle.</li>
+    </ul>
+  </section>
+
+  <!-- Submission Requirements -->
+  <section class="bg-white rounded-2xl p-6 shadow-sm border">
+    <h2 class="text-2xl font-semibold mb-3 text-indigo-700">Submission Requirements</h2>
+    <ul class="list-disc pl-6 space-y-1 text-gray-700">
+      <li><strong>Git Repository Link:</strong> Public repo on GitHub/GitLab with all project files.</li>
+      <li><strong>Git Log:</strong> Include output from <code>git log --oneline > git_log.txt</code>.</li>
+      <li><strong>Deployed App Link:</strong> Provide working deployment (GitHub Pages, Netlify, or Vercel).</li>
+      <li><strong>README.md:</strong> Must include setup instructions, project description, and app link.</li>
+    </ul>
+  </section>
+</div>
+</body>
+</html>

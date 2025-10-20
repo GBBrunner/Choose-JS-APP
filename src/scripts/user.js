@@ -1,6 +1,8 @@
-// import { createHeader } from '/src/scripts/header.js';
+import { createHeader, createFooter } from './header.js';
 import { currentList } from './login';
 document.addEventListener('DOMContentLoaded', () => {
+    createHeader();
+    createFooter();
 
             
 // Add logout button functionality

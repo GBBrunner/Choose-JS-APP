@@ -1,4 +1,4 @@
-import { createHeader } from './header.js';
+import { createHeader,createFooter } from './header.js';
 let userCheck = localStorage.getItem('priorUser');
 userCheck = JSON.parse(userCheck);
 
@@ -86,8 +86,9 @@ function renderFavoritesSections() {
   const favContainer = document.getElementById('favorites-container');
   const moviesContainer = document.getElementById('favorite-movies-container');
   const tvContainer = document.getElementById('favorite-tv-container');
+
+  // If containers don't exist (e.g., script imported on a different page), safely exit
   if (!moviesContainer || !tvContainer) {
-    console.error('Favorites containers not found');
     return;
   }
 
@@ -98,7 +99,9 @@ function renderFavoritesSections() {
 
   // Movies section
   if (userCheck === null) {
-    favContainer.innerHTML = '<div class="text-center text-indigo-800 w-full py-8 mt-6"><h2 class="text-2xl font-bold mb-2">Please Log In</h2><p>You must be logged in to view your favorites.</p></div>';
+    if (favContainer) {
+      favContainer.innerHTML = '<div class="text-center text-indigo-800 w-full py-8 mt-6"><h2 class="text-2xl font-bold mb-2">Please Log In</h2><p>You must be logged in to view your favorites.</p></div>';
+    }
     return;
   }
   if (!movies.length && !tvShows.length) {
@@ -131,8 +134,14 @@ function renderFavoritesSections() {
 document.addEventListener('DOMContentLoaded', async () => {
   // Create the header dynamically
   createHeader();
+  createFooter();
   // Initial render
-  renderFavoritesSections();
+  if (
+    document.getElementById('favorite-movies-container') ||
+    document.getElementById('favorite-tv-container')
+  ) {
+    renderFavoritesSections();
+  }
 });
 
 // Re-render when favorites are updated elsewhere in the app

@@ -1,5 +1,6 @@
 // TV shows page using mediaCarousel functionality with TV show API endpoints
 import {mediaCarousel, createCarousel, API_URLS} from './mediaCarousel.js';
+import { createHeader, createFooter } from './header.js';
 
 // Store initial carousels configuration for restoring after search
 const initialCarousels = [
@@ -16,13 +17,18 @@ mediaCarousel(API_URLS.tv.topRated, 'Top Rated TV Shows', 230);
 
 // Custom search handler for TV shows
 addEventListener('DOMContentLoaded', () => {
+    // Ensure header/footer exist first (searchDiv comes from header)
+    createHeader();
+    createFooter();
     const searchDiv = document.getElementById('searchDiv');
     const searchInput = document.createElement('input');
     searchInput.id = "searchInput";
     searchInput.type = "text";
     searchInput.placeholder = "Search all TV Shows . . .";
     searchInput.className = "border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-[30rem]";
-    searchDiv.appendChild(searchInput);
+    if (searchDiv) {
+        searchDiv.appendChild(searchInput);
+    }
 
     let debounceTimer;
     

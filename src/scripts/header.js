@@ -15,14 +15,6 @@ function createHeader() {
     const searchInputDiv = document.createElement('div');
         searchInputDiv.id = "searchDiv";
     header.appendChild(searchInputDiv);
-
-    // const searchInput = document.createElement('input');
-    //     searchInput.id = "searchInput";
-    //     searchInput.type = "text";
-    //     searchInput.placeholder = "Search all movies . . .";
-    //     searchInput.className = "border border-gray-300 rounded-2xl px-4 py-2 focus:outline-none focus:ring-2 focus:ring-indigo-500 w-[30rem]";
-    // header.appendChild(searchInput);
-
     const nav = document.createElement('nav');
         const ul = document.createElement('ul');
             const homeLink = document.createElement('a');
@@ -75,6 +67,30 @@ function createHeader() {
     
     document.body.prepend(header);
 }
-    
-export { createHeader };
+function createFooter() {
+    // Avoid duplicating footer if already added
+    if (document.querySelector('footer.site-footer')) return;
+
+    const footer = document.createElement('footer');
+    footer.className = 'site-footer flex flex-wrap justify-center items-center h-[6rem] gap-3 w-screen p-4 bg-indigo-700 mt-8 text-white text-center';
+
+    // Simple footer content; customize as needed
+    const year = new Date().getFullYear();
+    footer.innerHTML = `
+      <div class="w-full flex items-center justify-center gap-3">
+      <a href="/index.html" class="underline hover:no-underline">Movies</a>
+        <span class="opacity-70">\u2022</span>
+        <a href="/src/html/tv_shows.html" class="underline hover:no-underline">TV Shows</a>
+        <span class="opacity-70">\u2022</span>
+        <a href="/src/html/favorites.html" class="underline hover:no-underline">Favorites</a>
+        <span class="opacity-70">\u2022</span>
+        <a href="/src/html/movie_requirements.html" class="underline hover:no-underline">Movie App Requirements</a>
+        <span class="opacity-70">\u2022</span>
+        <a href="/src/html/project_criteria.html" class="underline hover:no-underline">Project Criteria</a>
+      </div>
+    `;
+
+    document.body.appendChild(footer);
+}
+export { createHeader, createFooter };
 
