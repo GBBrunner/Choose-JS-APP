@@ -44,7 +44,7 @@ class favoriteMovie {
             favItem.innerHTML = `
                 <img src="${this.poster}" alt="movie image">
                 <h2>${this.title}</h2>
-                <p>${this.id}</p>
+                <p class="flex">Remove <i class="fa-solid fa-x"></i></p>
             `;
             return favItem;
         }

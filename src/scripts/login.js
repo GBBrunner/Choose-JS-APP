@@ -49,11 +49,12 @@ class UserList {
 }
 
 class User {
-    constructor(first, last, email, password) {
+    constructor(first, last, email, password, joined) {
         this.firstName = first;
         this.lastName = last;
         this.email = email;
         this.password = password;
+        this.joined = joined;
     }
 
     save() {
@@ -61,12 +62,28 @@ class User {
             firstName: this.firstName,
             lastName: this.lastName,
             email: this.email,
-            password: this.password
+            password: this.password,
+            joined: this.joined
         }));
     }
 }
+function getUserDate() {
+    const d = new Date();
+    const Day = JSON.stringify(d.getDate());
+    const Month = JSON.stringify(d.getMonth() + 1);
+    const Year = JSON.stringify(d.getFullYear());
+
+    const Hour = JSON.stringify(d.getHours());
+    let Minute = JSON.stringify(d.getMinutes());
+    if (Minute.length < 2) {
+        Minute = '0' + Minute;
+    }
+
+    const myDate = `Joined ${Month}/${Day}/${Year} at ${Hour}:${Minute}`;
+    return myDate;
+}
 function logNewUser(first, last, email, password) {
-    const checkThisUser = new User(first, last, email, password);
+    const checkThisUser = new User(first, last, email, password, getUserDate());
     for (const user of currentList.list) {
         if (user.email === checkThisUser.email) {
             alert('A user with this email already exists');
