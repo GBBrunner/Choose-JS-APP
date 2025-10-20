@@ -11,16 +11,56 @@ if (logoutButton) {
         window.location.href = '/index.html';
     });
 }
+
+// Wire up close behavior for any modal close buttons
+document.querySelectorAll('.close_button').forEach((btn) => {
+    btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        const modalEl = btn.closest('.modal');
+        if (modalEl) {
+            modalEl.style.display = 'none';
+        }
+    });
+});
+
+// Allow clicking on backdrop (outside the form) to close the modal
+document.querySelectorAll('.modal').forEach((modalEl) => {
+    modalEl.addEventListener('click', (e) => {
+        if (e.target === modalEl) {
+            modalEl.style.display = 'none';
+        }
+    });
+});
+
+// Close any open modal on Escape key
+document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+        document.querySelectorAll('.modal').forEach((m) => {
+            if (getComputedStyle(m).display !== 'none') {
+                m.style.display = 'none';
+            }
+        });
+    }
+});
+});
+let modal;
+const changePasswordButton = document.getElementById('changePasswordButton');
+changePasswordButton.addEventListener('click', () => {
+    // Show the modal
+    modal = document.getElementById('change_password_modal');
+    modal.style.display = 'flex';
 });
 const deleteAccountButton = document.getElementById('deleteAccountButton');
 deleteAccountButton.addEventListener('click', () => {
     // Show the modal
-    const modal = document.getElementById('delete_user_modal');
+    modal = document.getElementById('delete_user_modal');
     modal.style.display = 'flex';
 });
 
 const confirmRemovalButton = document.getElementById('removalButton');
-confirmRemovalButton.addEventListener('click', () => {
+confirmRemovalButton.addEventListener('click', (e) => {
+    // Prevent form submission/page reload
+    e.preventDefault();
     removeAccount(document.getElementById('RemovalEmail').value, document.getElementById('RemovalPassword').value);
 });
 function removeAccount(email, password) {
@@ -43,3 +83,46 @@ function removeAccount(email, password) {
     }
     alert('Account does not exist');
 }
+
+function checkNewPassword(newPass, checkPass) {
+    if (newPass === '' || checkPass === '') {
+        alert('Enter New Password')
+        return false;
+    } else if (newPass !== checkPass) {
+        alert("Passwords Don't Match")
+        return false;
+    } else {
+        return true;
+    }
+}
+function changePassword(email, password, newPass, checkPass) {
+    if (checkNewPassword(newPass, checkPass) === false) {
+        return
+    }
+    for (const user of currentList.list) {
+        if (user.email === email) {
+            if (user.password === password) {
+                user.password = newPass;
+                localStorage.setItem('priorUser', JSON.stringify(user));
+                localStorage.setItem('myUserList', JSON.stringify(currentList.list));
+                location.reload();
+                return;
+            } else {
+                alert('Current Password Incorrect');
+                return;
+            }
+        }
+    }
+    alert('Account does not exist');
+}
+
+const changePassSubmit = document.getElementById('changePassSubmit');
+changePassSubmit.addEventListener('click', (e) => {
+    // Prevent form submission/page reload
+    e.preventDefault();
+    const email = document.getElementById("changePassEmail").value;
+    const oldPassword = document.getElementById('oldPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const conPassword = document.getElementById('conPassword').value;
+    changePassword(email, oldPassword, newPassword, conPassword);
+});
