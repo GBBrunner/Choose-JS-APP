@@ -13,7 +13,6 @@ const API_OPTIONS = {
     Authorization: `Bearer ${API_ACCESS_TOKEN}`,
   },
 };
-
 const API_URLS = {
   search: 'https://api.themoviedb.org/3/search/collection?include_adult=false&language=en-US&page=1',
   movie: {
@@ -159,14 +158,11 @@ async function createCarousel(url, title = '', isSearch = false, tileSize = 200)
   let mediaItems = [];
   let currentIndex = 0;
   let isAnimating = false;
-  // Removed certification cache and related logic
 
   const getVisibleCount = () => {
     const gap = parseInt(getComputedStyle(strip).gap) || 0;
     return Math.max(1, Math.floor((wrapper.clientWidth + gap) / (tileSize + gap)));
   };
-
-// Removed certification fetching and helper functions
 
   const render = async () => {
     if (!mediaItems.length) {
@@ -217,7 +213,6 @@ async function createCarousel(url, title = '', isSearch = false, tileSize = 200)
   mediaItems = data?.results || [];
   await render();
 }
-
 // --- Initialization ---
 function setupSearchHandler() {
   const searchInput = document.getElementById('searchInput');
@@ -251,7 +246,6 @@ function setupSearchHandler() {
 function mediaCarousel(url, title = '', tileSize = 200) {
   initialCarousels.push({ url, title, tileSize });
 }
-
 // Initialize all carousels sequentially when DOM is ready
 document.addEventListener('DOMContentLoaded', async () => {
   for (const config of initialCarousels) {
@@ -261,7 +255,6 @@ document.addEventListener('DOMContentLoaded', async () => {
   isSearchHandlerAttached = true;
 });
 
-// export { mediaCarousel, createCarousel, API_URLS, API_OPTIONS, fetchJson };
 // Exports for functional use in other modules
 export { mediaCarousel, createCarousel, API_URLS, API_OPTIONS, fetchJson};
 // Exports for Jasmine tests
