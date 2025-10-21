@@ -83,7 +83,7 @@ function getUserDate() {
         Hour = String(Hour - 12);
         timeOfDay = 'PM'
     }
-    const myDate = `Joined ${Month}/${Day}/${Year} at ${Hour}:${Minute} ${timeOfDay}`;
+    const myDate = `${Month}/${Day}/${Year} at ${Hour}:${Minute} ${timeOfDay}`;
     return myDate;
 }
 
