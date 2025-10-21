@@ -18,7 +18,6 @@ mediaCarousel(API_URLS.tv.topRated, 'Top Rated TV Shows', 230);
 // Custom search handler for TV shows
 addEventListener('DOMContentLoaded', () => {
     // Ensure header/footer exist first (searchDiv comes from header)
-    createHeader();
     createFooter();
     const searchDiv = document.getElementById('searchDiv');
     const searchInput = document.createElement('input');
