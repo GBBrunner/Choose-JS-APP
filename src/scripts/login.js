@@ -112,7 +112,7 @@ const logIn = (email, password) => {
         alert('Password Incorrect');
         return;
     }
-    new User(user.firstName, user.lastName, user.email, user.password).save();
+    new User(user.firstName, user.lastName, user.email, user.password, user.joined).save();
     window.location.href = '/index.html';
 };
 // button code for switching between login and signup forms
