@@ -63,7 +63,7 @@ confirmRemovalButton.addEventListener('click', (e) => {
     removeAccount(document.getElementById('RemovalEmail').value, document.getElementById('RemovalPassword').value);
 });
 function removeAccount(email, password) {
-    const rEmail = document.getElementById('RemovalEmail').value;
+    const rEmail = document.getElementById('RemovalEmail').value.toLowerCase();
     const rPassword = document.getElementById('RemovalPassword').value;
     for (const user of currentList.list) {
         if (user.email === rEmail) {
@@ -119,7 +119,7 @@ const changePassSubmit = document.getElementById('changePassSubmit');
 changePassSubmit.addEventListener('click', (e) => {
     // Prevent form submission/page reload
     e.preventDefault();
-    const email = document.getElementById("changePassEmail").value;
+    const email = document.getElementById("changePassEmail").value.toLowerCase();
     const oldPassword = document.getElementById('oldPassword').value;
     const newPassword = document.getElementById('newPassword').value;
     const conPassword = document.getElementById('conPassword').value;
@@ -134,6 +134,6 @@ if (userDisplay && priorUser) {
         <p><strong>First Name:</strong> ${priorUser.firstName}</p>
         <p><strong>Last Name:</strong> ${priorUser.lastName}</p>
         <p><strong>Email:</strong> ${priorUser.email}</p>
-        <p>${priorUser.joined}</p>
+        <p><strong>Joined: </strong>${priorUser.joined}</p>
     `;
 }

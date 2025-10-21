@@ -24,8 +24,16 @@ document.addEventListener('DOMContentLoaded', () => {
         signupButton.addEventListener('click', () => {
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.toLowerCase();
             const password = document.getElementById('password').value;
+            if (firstName === '' || lastName === '' || email === '' || password === '') {
+                alert('Please fill in all fields');
+                return;
+            }
+            if (password.length < 8) {
+                alert('Password must be at least 8 characters long');
+                return;
+            }
             logNewUser(firstName, lastName, email, password);
             window.location.href = '/index.html';
         });
@@ -33,7 +41,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (loginButton) {
         loginButton.addEventListener('click', () => {
-            const loginEmail = document.getElementById('loginEmail').value;
+            const loginEmail = document.getElementById('loginEmail').value.toLowerCase();
             const loginPassword = document.getElementById('loginPassword').value;
             logIn(loginEmail, loginPassword);
         });
@@ -84,7 +92,7 @@ function getUserDate() {
         Hour = String(Hour - 12);
         timeOfDay = 'PM'
     }
-    const myDate = `Joined ${Month}/${Day}/${Year} at ${Hour}:${Minute} ${timeOfDay}`;
+    const myDate = `${Month}/${Day}/${Year} at ${Hour}:${Minute} ${timeOfDay}`;
     return myDate;
 }
 
@@ -113,7 +121,7 @@ const logIn = (email, password) => {
         alert('Password Incorrect');
         return;
     }
-    new User(user.firstName, user.lastName, user.email, user.password).save();
+    new User(user.firstName, user.lastName, user.email, user.password, user.joined).save();
     window.location.href = '/index.html';
 };
 // button code for switching between login and signup forms
