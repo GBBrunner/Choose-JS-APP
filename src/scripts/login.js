@@ -1,5 +1,5 @@
 import {createHeader, createFooter} from './header.js';
-
+// A change
 let currentList;
 
 document.addEventListener('DOMContentLoaded', () => {
