@@ -24,15 +24,23 @@ document.addEventListener('DOMContentLoaded', () => {
         signupButton.addEventListener('click', () => {
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
-            const email = document.getElementById('email').value;
+            const email = document.getElementById('email').value.toLowerCase();
             const password = document.getElementById('password').value;
+            if (firstName === '' || lastName === '' || email === '' || password === '') {
+                alert('Please fill in all fields');
+                return;
+            }
+            if (password.length < 8) {
+                alert('Password must be at least 8 characters long');
+                return;
+            }
             logNewUser(firstName, lastName, email, password);
         });
     }
 
     if (loginButton) {
         loginButton.addEventListener('click', () => {
-            const loginEmail = document.getElementById('loginEmail').value;
+            const loginEmail = document.getElementById('loginEmail').value.toLowerCase();
             const loginPassword = document.getElementById('loginPassword').value;
             logIn(loginEmail, loginPassword);
         });
