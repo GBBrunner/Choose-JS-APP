@@ -27,6 +27,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             logNewUser(firstName, lastName, email, password);
+            window.location.href = '/index.html';
         });
     }
 

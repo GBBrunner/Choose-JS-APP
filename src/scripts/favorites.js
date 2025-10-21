@@ -76,6 +76,47 @@ export const removeFromFavorites = (mediaId) => {
   }
 };
 
+// Factory to create a configured Favorites toggle button for a media item
+export const createFavoriteButton = (media, mediaType = 'movie', fontSizePx = 18) => {
+  const btn = document.createElement('button');
+  btn.className = 'fa-solid fa-heart';
+  btn.type = 'button';
+  btn.title = 'Add to favorites';
+  btn.style.fontSize = `${Math.max(8, Math.floor(fontSizePx))}px`;
+  btn.style.cursor = 'pointer';
+
+  // Initialize visual state
+  try {
+    const fav = isFavorite(media.id);
+    btn.style.color = fav ? 'red' : 'black';
+    btn.setAttribute('aria-pressed', fav ? 'true' : 'false');
+  } catch {
+    btn.style.color = 'black';
+    btn.setAttribute('aria-pressed', 'false');
+  }
+
+  // Toggle handler
+  btn.onclick = (evt) => {
+    const currentUser = getCurrentUser();
+    if (currentUser === null) {
+      alert('Please log in to add to favorites.');
+      return;
+    }
+    evt.stopPropagation();
+    if (isFavorite(media.id)) {
+      removeFromFavorites(media.id);
+      btn.style.color = 'black';
+      btn.setAttribute('aria-pressed', 'false');
+    } else {
+      addToFavorites(media, mediaType);
+      btn.style.color = 'red';
+      btn.setAttribute('aria-pressed', 'true');
+    }
+  };
+
+  return btn;
+};
+
 // Simple renderer to draw both Movies and TV sections
 function renderFavoritesSections() {
   const allFavs = getUserFavorites();

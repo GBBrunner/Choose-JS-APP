@@ -1,40 +1,12 @@
 ﻿// Media Carousel - handles carousel functionality for both Movies and TV Shows from TMDB API
-// Import the API Access Token from env.js
-import { API_ACCESS_TOKEN } from './env.js';
-import { getCurrentUser, isFavorite, addToFavorites, removeFromFavorites } from './favorites.js';
+import { createFavoriteButton } from './favorites.js';
+import API_CONFIG from './API_CONFIG.json' assert { type: 'json' };
+// Import API_OPTIONS from index.js (single source of truth). This module avoids side-effects on import.
+import { API_OPTIONS } from './index.js';
 
-// getCurrentUser now imported from favorites.js
-
-// API configuration
-const API_OPTIONS = {
-  headers: {
-    accept: 'application/json',
-    // The Access Token should have been set up in env.js as per README instructions. 
-    Authorization: `Bearer ${API_ACCESS_TOKEN}`,
-  },
-};
-const API_URLS = {
-  search: 'https://api.themoviedb.org/3/search/collection?include_adult=false&language=en-US&page=1',
-  movie: {
-    search: 'https://api.themoviedb.org/3/search/movie?language=en-US&page=1&query=',
-    popular: 'https://api.themoviedb.org/3/movie/popular?language=en-US&page=1',
-    upcoming: 'https://api.themoviedb.org/3/movie/upcoming?language=en-US&page=1',
-    topRated: 'https://api.themoviedb.org/3/movie/top_rated?language=en-US&page=1',
-  },
-  tv: {
-    search: 'https://api.themoviedb.org/3/search/tv?language=en-US&page=1&query=',
-    popular: 'https://api.themoviedb.org/3/tv/popular?language=en-US&page=1',
-    airingToday: 'https://api.themoviedb.org/3/tv/airing_today?language=en-US&page=1',
-    topRated: 'https://api.themoviedb.org/3/tv/top_rated?language=en-US&page=1',
-  }
-};
-  // Favorite button logic moved to favorites.js
-
-// --- Global State ---
+const API_URLS = API_CONFIG.API_URLS;
 let carouselIdCounter = 0;
 const initialCarousels = [];
-let isSearchHandlerAttached = false;
-
 // --- Utility Functions ---
 const fetchJson = async (url) => {
   try {
@@ -61,7 +33,6 @@ const createCarouselShell = (title, tileSize) => {
   }
 
   const btnClass = 'absolute bottom-4 bg-indigo-600 opacity-75 hover:opacity-90 text-white p-3 rounded-full shadow-md hover:bg-indigo-700 transition z-10 hidden';
-  
   const prevBtn = Object.assign(document.createElement('button'), { id: `prevBtn-${carouselId}`, className: `${btnClass} left-2`, innerHTML: '<i class="fa-solid fa-chevron-left text-lg"></i>' });
   const nextBtn = Object.assign(document.createElement('button'), { id: `nextBtn-${carouselId}`, className: `${btnClass} right-2`, innerHTML: '<i class="fa-solid fa-chevron-right text-lg"></i>' });
   const strip = Object.assign(document.createElement('div'), { id: `media-strip-${carouselId}`, className: 'flex flex-row gap-4 items-stretch' });
@@ -93,50 +64,26 @@ const createMediaCard = (media, tileSize, mediaType = 'movie', carouselId) => {
 
   const card = document.createElement('div');
   card.className = `media-card bg-white rounded-2xl shadow-md p-[${padding}px] flex flex-col justify-around items-center min-w-[${tileSize}px] max-w-[${tileSize}px] h-[${cardHeight}px] hover:rounded-none hover:scale-105 transition-transform duration-200`;
-  
-  card.innerHTML = `
-    <a href="/src/html/title_details.html">
+
+  const titleDetails = document.createElement('a');
+  // Pass media type so title_details can fetch the correct endpoint
+  titleDetails.href = `/src/html/title_details.html?id=${media.id}&type=${mediaType}`;
+  titleDetails.className = 'media-link';
+  titleDetails.innerHTML = `
       <img src="${imgSrc}" class="w-[${imgWidth}px] h-[${imgHeight}px] object-cover mb-2 rounded-lg" alt="${title}" onerror="this.onerror=null;this.src='${blankImage}';">
       <h3 class="font-semibold text-[${fontSizes.title}px] text-center mb-1 line-clamp-2">${title}</h3>
       <p class="text-[${fontSizes.year}px] text-gray-600 mb-1">${year}</p>
-    </a>
-    <div class="flex items-center gap-2 mt-1">
-      <span class="bg-yellow-200 text-yellow-800 text-[${fontSizes.rating}px] px-2 py-1 rounded-md">★ ${rating}</span>
-    </div>
-  `;
-  // Favorite button
-  const favBtn = document.createElement('button');
-    favBtn.className = "fa-solid fa-heart";
-    favBtn.type = 'button';
-    favBtn.title = 'Add to favorites';
-    favBtn.style.fontSize = `${scaledSize(18)}px`;
-    favBtn.style.cursor = 'pointer';
-  // set initial color based on stored favorites
-    try {
-      favBtn.style.color = isFavorite(media.id) ? 'red' : 'black';
-      favBtn.setAttribute('aria-pressed', isFavorite(media.id) ? 'true' : 'false');
-    } catch (err) {
-      favBtn.style.color = 'black';
-    }
+      `;
 
-    favBtn.onclick = (evt) => {
-      const currentUser = getCurrentUser();
-      if (currentUser === null) {
-        alert('Please log in to add to favorites.');
-        return;
-      }
-      evt.stopPropagation();
-      // toggle favorite state and persist
-      if (isFavorite(media.id)) {
-        removeFromFavorites(media.id);
-        favBtn.style.color = 'black';
-        favBtn.setAttribute('aria-pressed', 'false');
-      } else {
-        addToFavorites(media, mediaType);
-        favBtn.style.color = 'red';
-        favBtn.setAttribute('aria-pressed', 'true');
-      }
-    };
+  card.appendChild(titleDetails);
+
+  const ratingDiv = document.createElement('div');
+  ratingDiv.className = 'flex items-center gap-2 mt-1';
+  ratingDiv.innerHTML = `<span class="bg-yellow-200 text-yellow-800 text-[${fontSizes.rating}px] px-2 py-1 rounded-md">★ ${rating}</span>`;
+  card.appendChild(ratingDiv);
+
+  // Favorite button
+  const favBtn = createFavoriteButton(media, mediaType, scaledSize(18));
   card.querySelector('.flex.items-center.gap-2.mt-1').appendChild(favBtn);
   return card;
 };
@@ -149,10 +96,8 @@ async function createCarousel(url, title = '', isSearch = false, tileSize = 200)
     container.innerHTML = '';
     carouselIdCounter = 0;
   }
-
   // Detect if this is a TV show URL or movie URL
   const isTVShow = url.includes('/tv/') || url.includes('/search/tv');
-
   const { wrapper, strip, prevBtn, nextBtn, carouselId } = createCarouselShell(title, tileSize);
   
   let mediaItems = [];
@@ -255,7 +200,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   isSearchHandlerAttached = true;
 });
 
-// Exports for functional use in other modules
+// Exports for functional use in other modules (re-export API_OPTIONS for existing imports if any)
 export { mediaCarousel, createCarousel, API_URLS, API_OPTIONS, fetchJson};
 // Exports for Jasmine tests
 export default{createCarouselShell, createMediaCard};
