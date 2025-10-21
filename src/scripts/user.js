@@ -134,6 +134,6 @@ if (userDisplay && priorUser) {
         <p><strong>First Name:</strong> ${priorUser.firstName}</p>
         <p><strong>Last Name:</strong> ${priorUser.lastName}</p>
         <p><strong>Email:</strong> ${priorUser.email}</p>
-        <p>${priorUser.joined}</p>
+        <p><strong>Joined:</strong>${priorUser.joined}</p>
     `;
 }
