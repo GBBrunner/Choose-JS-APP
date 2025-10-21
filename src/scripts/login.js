@@ -50,11 +50,12 @@ class UserList {
 }
 
 class User {
-    constructor(first, last, email, password) {
+    constructor(first, last, email, password, joined) {
         this.firstName = first;
         this.lastName = last;
         this.email = email;
         this.password = password;
+        this.joined = joined;
     }
 
     save() {
@@ -62,20 +63,44 @@ class User {
             firstName: this.firstName,
             lastName: this.lastName,
             email: this.email,
-            password: this.password
+            password: this.password,
+            joined: this.joined
         }));
     }
 }
-const logNewUser = (first, last, email, password) => {
-    if (currentList.list.some(user => user.email === email)) {
-        alert('A user with this email already exists');
-        return;
+function getUserDate() {
+    const d = new Date();
+    const Day = JSON.stringify(d.getDate());
+    const Month = JSON.stringify(d.getMonth() + 1);
+    const Year = JSON.stringify(d.getFullYear());
+    let Hour = JSON.stringify(d.getHours());
+    let Minute = JSON.stringify(d.getMinutes());
+    let timeOfDay = 'AM'
+    if (Minute.length < 2) {
+        Minute = '0' + Minute;
     }
-    const currentUser = new User(first, last, email, password);
+    if (Number(Hour) > 12) {
+        Hour = String(Hour - 12);
+        timeOfDay = 'PM'
+    }
+    const myDate = `Joined ${Month}/${Day}/${Year} at ${Hour}:${Minute} ${timeOfDay}`;
+    return myDate;
+}
+
+function logNewUser(first, last, email, password) {
+    const checkThisUser = new User(first, last, email, password, getUserDate());
+    for (const user of currentList.list) {
+        if (user.email === checkThisUser.email) {
+            alert('A user with this email already exists');
+            return;
+        }
+    }
+    const currentUser = checkThisUser;
     currentUser.save();
-    currentList.add(currentUser);
+    currentList.add(currentUser)
     location.reload();
-};
+}
+
 
 const logIn = (email, password) => {
     const user = currentList.list.find(user => user.email === email);
