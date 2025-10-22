@@ -1,10 +1,8 @@
-import {createHeader, createFooter} from './header.js';
-// A change
+import {createFooter} from './header.js';
 let currentList;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Create the header dynamically
-    createHeader();
     createFooter();
     
     let checkList = JSON.parse(localStorage.getItem('myUserList'));
@@ -21,7 +19,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const loginButton = document.getElementById('loginButton');
 
     if (signupButton) {
-        signupButton.addEventListener('click', () => {
+        signupButton.addEventListener('click', (e) => {
+            // Prevent default form submission if this button is inside a <form>
+            if (e && typeof e.preventDefault === 'function') e.preventDefault();
             const firstName = document.getElementById('firstName').value;
             const lastName = document.getElementById('lastName').value;
             const email = document.getElementById('email').value.toLowerCase();
@@ -35,12 +35,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 return;
             }
             logNewUser(firstName, lastName, email, password);
-            window.location.href = '/index.html';
+            window.location.href = '../../index.html';
         });
     }
 
     if (loginButton) {
-        loginButton.addEventListener('click', () => {
+        loginButton.addEventListener('click', (e) => {
+            // Prevent default form submission if this button is inside a <form>
+            if (e && typeof e.preventDefault === 'function') e.preventDefault();
             const loginEmail = document.getElementById('loginEmail').value.toLowerCase();
             const loginPassword = document.getElementById('loginPassword').value;
             logIn(loginEmail, loginPassword);
@@ -122,7 +124,7 @@ const logIn = (email, password) => {
         return;
     }
     new User(user.firstName, user.lastName, user.email, user.password, user.joined).save();
-    window.location.href = '/index.html';
+    window.location.href = '../../index.html';
 };
 // button code for switching between login and signup forms
 document.addEventListener('DOMContentLoaded', () => {

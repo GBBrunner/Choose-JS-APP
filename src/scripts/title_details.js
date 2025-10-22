@@ -1,6 +1,12 @@
 import { createFooter } from './header.js';
 import { createFavoriteButton } from './favorites.js';
 import { API_URLS, fetchJson } from './mediaCarousel.js';
+import { closeModal } from './index.js';
+
+let userCheck = localStorage.getItem('priorUser');
+userCheck = JSON.parse(userCheck);
+
+closeModal();
 
 function displayTitleDetails(media) {
     const container = document.getElementById('titleDetailsContainer');
@@ -31,8 +37,29 @@ function displayTitleDetails(media) {
             favLabel.textContent = 'Add to Favorites';
             favLabel.className = 'text-sm text-gray-600';
         headerRow.appendChild(favLabel);
-    const favBtn = createFavoriteButton(media, window.__mediaType || 'movie', 20);
-        headerRow.appendChild(favBtn);
+        const favBtn = createFavoriteButton(media, window.__mediaType || 'movie', 20);
+            headerRow.appendChild(favBtn);
+        const writeReviewBtn = document.createElement('button');
+            writeReviewBtn.textContent = 'Write a Review';
+            writeReviewBtn.className = 'ml-4 bg-indigo-600 text-white px-3 py-1 rounded-lg hover:bg-indigo-700 transition-colors duration-150 text-sm';
+            const reviewIcon = document.createElement('span');
+                reviewIcon.className = 'fa-solid fa-pencil mr-2';
+            writeReviewBtn.prepend(reviewIcon);
+        headerRow.appendChild(writeReviewBtn);
+        writeReviewBtn.addEventListener('click', () => {
+            if (userCheck === null){
+                alert('Please log in to write a review.');
+                return;
+            }
+            const reviewSection = document.getElementById('rate_and_review');
+            if (reviewSection.style.display === 'block') {
+                reviewSection.style.display = 'none';
+                return;
+            }
+                reviewSection.style.display = 'block';
+
+        });
+
     container.appendChild(headerRow);
 
     const titleOverview = document.createElement('p');
@@ -40,6 +67,9 @@ function displayTitleDetails(media) {
         titleOverview.className = 'text-gray-700 mb-4';
     container.appendChild(titleOverview);
 }
+
+
+
 function createIframe(video) {
     const iframe = document.createElement('iframe');
         iframe.src = `https://www.youtube.com/embed/${video.key}`;
@@ -77,6 +107,8 @@ function renderVideos(videos) {
     if (appended === 0) return; // nothing embeddable to show
     section.appendChild(list);
     container.appendChild(section);
+    const newBreak = document.createElement('br');
+    container.appendChild(newBreak);
 }
 
 document.addEventListener('DOMContentLoaded', () => {

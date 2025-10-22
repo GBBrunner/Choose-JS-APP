@@ -1,5 +1,6 @@
 import { createFooter } from './header.js';
 import { currentList } from './login';
+import { closeModal } from './index.js';
 document.addEventListener('DOMContentLoaded', () => {
     createFooter();        
 // Add logout button functionality
@@ -12,15 +13,7 @@ if (logoutButton) {
 }
 
 // Wire up close behavior for any modal close buttons
-document.querySelectorAll('.close_button').forEach((btn) => {
-    btn.addEventListener('click', (e) => {
-        e.preventDefault();
-        const modalEl = btn.closest('.modal');
-        if (modalEl) {
-            modalEl.style.display = 'none';
-        }
-    });
-});
+closeModal();
 
 // Allow clicking on backdrop (outside the form) to close the modal
 document.querySelectorAll('.modal').forEach((modalEl) => {

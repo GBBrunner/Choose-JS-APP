@@ -33,4 +33,24 @@ export function initHomePage() {
         }
     });
 }
-initHomePage();
+
+// Auto-run only on the home page
+if (typeof window !== 'undefined' && window.location && typeof window.location.pathname === 'string') {
+    const path = window.location.pathname || '';
+    if (path === '/' || path.endsWith('/index.html')) {
+        initHomePage();
+    }
+}
+
+function closeModal() {
+    document.querySelectorAll('.close_button').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            const modalEl = btn.closest('.modal');
+            if (modalEl) {
+                modalEl.style.display = 'none';
+            }
+        });
+    });
+}
+export { closeModal };
