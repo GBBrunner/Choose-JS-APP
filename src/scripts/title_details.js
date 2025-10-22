@@ -8,6 +8,114 @@ userCheck = JSON.parse(userCheck);
 
 closeModal();
 
+// ------------------------------
+// Local Storage Review Utilities
+// ------------------------------
+const getStorageKey = (titleId) => `reviews:${titleId}`; // movie/tv id as key
+
+function loadReviews(titleId) {
+    try {
+        const raw = localStorage.getItem(getStorageKey(titleId));
+        return raw ? JSON.parse(raw) : [];
+    } catch (e) {
+        console.error('Failed to load reviews:', e);
+        return [];
+    }
+}
+
+function saveReviews(titleId, reviews) {
+    try {
+        localStorage.setItem(getStorageKey(titleId), JSON.stringify(reviews));
+    } catch (e) {
+        console.error('Failed to save reviews:', e);
+    }
+}
+
+function addReview(titleId, review) {
+    const reviews = loadReviews(titleId);
+    reviews.unshift(review);
+    saveReviews(titleId, reviews);
+}
+
+function deleteReview(titleId, reviewId) {
+    const reviews = loadReviews(titleId).filter(r => r.id !== reviewId);
+    saveReviews(titleId, reviews);
+}
+
+function formatDate(d) {
+    const date = (d instanceof Date) ? d : new Date(d);
+    return `${date.toLocaleDateString()} ${date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+}
+
+// ------------------------------
+// Rendering Reviews
+// ------------------------------
+function renderReviews(titleId, currentUserEmail) {
+    const listEl = document.getElementById('reviewsList');
+    if (!listEl) return;
+    listEl.innerHTML = '';
+
+    const reviews = loadReviews(titleId);
+    if (!reviews.length) {
+        const empty = document.createElement('p');
+        empty.className = 'text-gray-500';
+        empty.textContent = 'No reviews yet. Be the first to write one!';
+        listEl.appendChild(empty);
+        return;
+    }
+
+    reviews.forEach(r => {
+        const item = document.createElement('div');
+        item.className = 'p-3 rounded border border-gray-200 bg-gray-50';
+
+        const header = document.createElement('div');
+        header.className = 'flex items-start justify-between gap-2';
+
+        const left = document.createElement('div');
+        left.className = 'flex items-center gap-2';
+
+        const ratingBadge = document.createElement('span');
+        ratingBadge.className = 'inline-flex items-center justify-center w-8 h-8 rounded-full bg-indigo-600 text-white text-sm font-semibold';
+        ratingBadge.textContent = r.rating;
+        left.appendChild(ratingBadge);
+
+        const meta = document.createElement('div');
+        meta.className = 'text-sm';
+        const author = document.createElement('div');
+        author.className = 'font-medium';
+        author.textContent = r.authorName || r.authorEmail;
+        const dateEl = document.createElement('div');
+        dateEl.className = 'text-gray-500';
+        dateEl.textContent = formatDate(r.createdAt);
+        meta.appendChild(author);
+        meta.appendChild(dateEl);
+        left.appendChild(meta);
+        header.appendChild(left);
+
+        if (currentUserEmail && r.authorEmail === currentUserEmail) {
+            const delBtn = document.createElement('button');
+            delBtn.className = 'text-red-600 hover:text-red-800';
+            delBtn.setAttribute('title', 'Delete review');
+            delBtn.setAttribute('aria-label', 'Delete review');
+            delBtn.dataset.action = 'delete-review';
+            delBtn.dataset.reviewId = r.id;
+            const icon = document.createElement('span');
+            icon.className = 'fa-solid fa-trash';
+            delBtn.appendChild(icon);
+            header.appendChild(delBtn);
+        }
+
+        item.appendChild(header);
+
+        const body = document.createElement('p');
+        body.className = 'mt-2 text-gray-800';
+        body.textContent = r.text;
+        item.appendChild(body);
+
+        listEl.appendChild(item);
+    });
+}
+
 function displayTitleDetails(media) {
     const container = document.getElementById('titleDetailsContainer');
     if (!container) return;
@@ -46,18 +154,24 @@ function displayTitleDetails(media) {
                 reviewIcon.className = 'fa-solid fa-pencil mr-2';
             writeReviewBtn.prepend(reviewIcon);
         headerRow.appendChild(writeReviewBtn);
-        writeReviewBtn.addEventListener('click', () => {
-            if (userCheck === null){
-                alert('Please log in to write a review.');
-                return;
-            }
-            const reviewSection = document.getElementById('rate_and_review');
-            if (reviewSection.style.display === 'block') {
-                reviewSection.style.display = 'none';
-                return;
-            }
-                reviewSection.style.display = 'block';
+            writeReviewBtn.addEventListener('click', () => {
+                if (userCheck === null){
+                    alert('Please log in to write a review.');
+                    return;
+                }
+                openWriteReviewPanel();
+            });
 
+        // View Reviews button to open sliding modal
+        const viewReviewsBtn = document.createElement('button');
+            viewReviewsBtn.textContent = 'View Reviews';
+            viewReviewsBtn.className = 'ml-2 bg-gray-200 text-gray-800 px-3 py-1 rounded-lg hover:bg-gray-300 transition-colors duration-150 text-sm';
+            const viewIcon = document.createElement('span');
+                viewIcon.className = 'fa-solid fa-comments mr-2';
+            viewReviewsBtn.prepend(viewIcon);
+        headerRow.appendChild(viewReviewsBtn);
+        viewReviewsBtn.addEventListener('click', () => {
+            openReviewsPanel();
         });
 
     container.appendChild(headerRow);
@@ -129,6 +243,109 @@ document.addEventListener('DOMContentLoaded', () => {
           displayTitleDetails(media);
           renderVideos(mediaVideos);
           document.title = media.title || media.name || 'Title Details';
+          // Render reviews and wire up interactions
+          renderReviews(titleId, userCheck?.email);
+
+          const submitBtn = document.getElementById('submit_review');
+          const ratingInput = document.getElementById('media_rating');
+          const reviewInput = document.getElementById('media_review');
+          const closeBtn = document.getElementById('close_button');
+
+          if (closeBtn) {
+              closeBtn.addEventListener('click', () => {
+                  closeWriteReviewPanel();
+              });
+          }
+
+          if (submitBtn && ratingInput && reviewInput) {
+              submitBtn.addEventListener('click', () => {
+                  if (!userCheck) {
+                      alert('Please log in to submit a review.');
+                      return;
+                  }
+                  const rating = Number(ratingInput.value);
+                  const text = (reviewInput.value || '').trim();
+                  if (!rating || rating < 1 || rating > 10) {
+                      alert('Please enter a rating between 1 and 10.');
+                      return;
+                  }
+                  if (!text) {
+                      alert('Please enter a review.');
+                      return;
+                  }
+                  const review = {
+                      id: `${Date.now()}-${Math.random().toString(36).slice(2, 8)}`,
+                      rating,
+                      text,
+                      authorEmail: userCheck.email,
+                      authorName: `${userCheck.firstName ?? ''} ${userCheck.lastName ?? ''}`.trim() || userCheck.email,
+                      createdAt: new Date().toISOString()
+                  };
+                  addReview(titleId, review);
+                  // Clear inputs and hide panel
+                  ratingInput.value = '';
+                  reviewInput.value = '';
+                  closeWriteReviewPanel();
+                  // Re-render list
+                  renderReviews(titleId, userCheck.email);
+              });
+          }
+
+          const reviewsPanel = document.getElementById('reviewsPanel');
+          const reviewsBackdrop = document.getElementById('reviewsBackdrop');
+          const closeReviewsBtn = document.getElementById('close_reviews_panel');
+          const writePanel = document.getElementById('rate_and_review');
+          // helpers for sliding modals
+          window.openReviewsPanel = function openReviewsPanel() {
+              if (writePanel) writePanel.classList.add('-translate-x-full'); // ensure write panel is closed (left panel)
+              if (reviewsPanel) reviewsPanel.classList.remove('translate-x-full');
+              if (reviewsBackdrop) {
+                  reviewsBackdrop.classList.remove('pointer-events-none');
+                  // trigger opacity transition
+                  requestAnimationFrame(() => reviewsBackdrop.classList.add('opacity-100'));
+              }
+              // refresh list on open
+              renderReviews(titleId, userCheck?.email);
+          };
+          window.closeReviewsPanel = function closeReviewsPanel() {
+              if (reviewsPanel) reviewsPanel.classList.add('translate-x-full');
+              if (reviewsBackdrop) {
+                  reviewsBackdrop.classList.remove('opacity-100');
+                  // after transition, make it non-interactive
+                  setTimeout(() => reviewsBackdrop.classList.add('pointer-events-none'), 200);
+              }
+          };
+
+          window.openWriteReviewPanel = function openWriteReviewPanel() {
+              if (reviewsPanel) reviewsPanel.classList.add('translate-x-full'); // ensure reviews panel is closed (right panel)
+              if (writePanel) writePanel.classList.remove('-translate-x-full');
+              if (reviewsBackdrop) {
+                  reviewsBackdrop.classList.remove('pointer-events-none');
+                  requestAnimationFrame(() => reviewsBackdrop.classList.add('opacity-100'));
+              }
+          };
+          window.closeWriteReviewPanel = function closeWriteReviewPanel() {
+              if (writePanel) writePanel.classList.add('-translate-x-full');
+              if (reviewsBackdrop) {
+                  reviewsBackdrop.classList.remove('opacity-100');
+                  setTimeout(() => reviewsBackdrop.classList.add('pointer-events-none'), 200);
+              }
+          };
+
+          if (closeReviewsBtn) closeReviewsBtn.addEventListener('click', window.closeReviewsPanel);
+          if (reviewsBackdrop) reviewsBackdrop.addEventListener('click', () => { window.closeReviewsPanel(); window.closeWriteReviewPanel(); });
+          if (reviewsPanel) {
+              reviewsPanel.addEventListener('click', (e) => {
+                  const target = e.target;
+                  const btn = target.closest ? target.closest('button[data-action="delete-review"]') : null;
+                  if (!btn) return;
+                  if (!userCheck) return; // safety
+                  const reviewId = btn.dataset.reviewId;
+                  if (!reviewId) return;
+                  deleteReview(titleId, reviewId);
+                  renderReviews(titleId, userCheck.email);
+              });
+          }
         }
         // If media fetch fails, do nothing special; page will remain minimal
     })();
