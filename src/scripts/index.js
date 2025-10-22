@@ -33,17 +33,4 @@ export function initHomePage() {
         }
     });
 }
-
-// Auto-run only on the home page
-if (typeof window !== 'undefined' && window.location && typeof window.location.pathname === 'string') {
-    const path = window.location.pathname || '';
-    if (path === '/' || path.endsWith('/index.html')) {
-        initHomePage();
-    }
-}
-const test = true;
-try {
-    test = false;
-} catch (e) {
-    console.error(e);
-}
+initHomePage();
