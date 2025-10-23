@@ -3,6 +3,17 @@ import { createFavoriteButton } from './favorites.js';
 import { API_URLS, fetchJson } from './mediaCarousel.js';
 import { closeModal } from './index.js';
 
+export class ReviewEntry {
+    constructor(rating = null, review = null, id = null) {
+        this.rating = rating;
+        this.review = review;
+        this.id = id;
+    }
+    rating = getElementById('rating').value;
+    review = getElementById('review').value
+    id = media.id;
+}
+
 let userCheck = localStorage.getItem('priorUser');
 userCheck = JSON.parse(userCheck);
 
