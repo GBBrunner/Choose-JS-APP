@@ -26,7 +26,7 @@ Displayed there will be all the relevant information on the title. (i.e., Title,
 
 ## ---------- LOG IN/SIGN UP PAGE ----------
 - The sign up page uses local stoage for demonstation purposes, in a real application an online data system to store data.
-- It won't let you create a new account if one already exists under the same name. (i.e., you can't create account abc123 if there is one that exists already)
+- It won't let you create a new account if one already exists under the same email. (i.e., you can't create account abc123 if there is one that exists already)
 - On Login page it won't let you log in if password does not match user.
 - Once logged in it will redirect you to index.html and say "hello,<user>" instead of Log In/SignUp
 
