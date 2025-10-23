@@ -3,22 +3,10 @@ import { createFavoriteButton } from './favorites.js';
 import { API_URLS, fetchJson } from './mediaCarousel.js';
 import { closeModal } from './index.js';
 
-export class ReviewEntry {
-    constructor(rating = null, review = null, id = null) {
-        this.rating = rating;
-        this.review = review;
-        this.id = id;
-    }
-    rating = getElementById('rating').value;
-    review = getElementById('review').value
-    id = media.id;
-}
-
 let userCheck = localStorage.getItem('priorUser');
 userCheck = JSON.parse(userCheck);
 
 closeModal();
-
 function displayTitleDetails(media) {
     const container = document.getElementById('titleDetailsContainer');
     if (!container) return;
@@ -108,7 +96,7 @@ function renderVideos(videos) {
     const list = document.createElement('div');
     list.className = 'flex flex-col items-start';
 
-    // Append videos in the order provided by TMDB; only embed supported platforms
+    // Append videos in the order provided by TMDB
     let appended = 0;
     items.forEach(v => {
             list.appendChild(createIframe(v));
@@ -121,7 +109,91 @@ function renderVideos(videos) {
     const newBreak = document.createElement('br');
     container.appendChild(newBreak);
 }
-
+function displayReviewSection() {
+    const commentDisplayArea = document.getElementById('comments')
+    class CommentItem {
+        constructor(comment, review, identity ) {
+            this.identity = 'Anonymous';
+            this.comment = comment;
+            this.review = review;
+            this.id = title.id;
+        }
+        render(area) {
+            const commentItem = document.createElement('div');
+            commentItem.className = 'comment';
+            commentItem.innerHTML = `
+                <h3><strong>${this.identity}</strong></h3>
+                <p>${this.comment}</p>
+                <p><em>Comment ID: ${this.id}</em></p>
+            `
+            area.appendChild(commentItem)
+        }
+    };
+    class SearchCommentItem {
+        constructor(comment, id) {
+            this.comment = comment;
+            this.id = id;
+        }
+        render(area) {
+            const commentItem = document.createElement('div');
+            commentItem.className = 'comment';
+            commentItem.innerHTML = `
+                <h3><strong>Anonymous</strong></h3>
+                <p>${this.comment}</p>
+                <p><em>Comment ID: ${this.id}</em></p>
+            `
+            area.appendChild(commentItem)
+        }
+    };
+    class ReviewWrap {
+        constructor() {
+            this.comments = [];
+        }
+        add(newCommentItem) {
+            this.comments.unshift(newCommentItem);
+            localStorage.setItem('myComments', JSON.stringify(this.comments))
+        }
+    }
+    const reviews = new ReviewWrap();
+    const reviewSubmitButton = document.getElementById('submitComment')
+    reviewSubmitButton.addEventListener('click', () => {
+        const review_input = document.getElementById('review_input').value;
+        if (review_input.length === 0) {
+            alert('Please enter a comment before submitting.');
+            return;
+        }
+        const newComment = new CommentItem(review_input);
+        reviews.add(newComment);
+        loadComments();
+    });
+    function loadComments() {
+        commentDisplayArea.innerHTML=' ';
+        for (const comment of reviews.comments) {
+            comment.render(commentDisplayArea);
+        }
+    }
+    function searchComments() {
+        const searchInput = title.id;
+        const searchDisplayArea = document.getElementById('searchDisplayArea');
+        searchDisplayArea.innerHTML = ' ';
+        for (const review of reviews.comments) {
+            if (review.id === searchInput) {
+                review.render(searchDisplayArea);
+            }
+        }
+    };
+    const searchElement = document.getElementById('searchInput');
+    searchElement.addEventListener('input', searchComments);
+    document.addEventListener('DOMContentLoaded', () => {
+        let storedReviews = JSON.parse(localStorage.getItem('myComments'));
+        storedReviews = storedReviews.reverse();
+        for (const review of storedReviews) {
+            const myNewReview = new SearchCommentItem(review.comment, review.id);
+            reviews.add(myNewReview);
+        }
+        loadComments();
+    });
+}
 document.addEventListener('DOMContentLoaded', () => {
     const params = new URLSearchParams(window.location.search);
     const titleId = params.get('id');
