@@ -13,7 +13,7 @@
 </head>
 <body>
     <div id="delete_user_modal" class="modal">
-        <form action="" class="h-[8rem] bg-white px-4 rounded-lg" >
+        <form action="" class="modalForm h-[8rem] bg-white px-4 rounded-lg" >
         <div class="close_button_container">
             <button type="button" class="close_button bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-1 px-2 rounded-full transition-colors duration-150" aria-label="Close delete account dialog">
                 <span class="fa-solid fa-xmark"></span>
@@ -34,18 +34,15 @@
                     <span class="fa-solid fa-xmark"></span>
                 </button>
             </div>
-        <h3>Please enter account</h3>
-        <div>
-        
-            <label for="changePassEmail">Email</label>
-            <input type="email" id="changePassEmail" class="border border-2">
-            <label for="oldPassword">Old Password</label>
-            <input type="password" id="oldPassword" class="border border-2">
-            <label for="newPassword">New Password</label>
-            <input type="password" id="newPassword" class="border border-2">
-            <label for="conPassword">Confirm New Password</label>
-            <input type="password" id="conPassword" class="border border-2">
-        </div>
+        <h3>Please enter account information to change password</h3>
+        <label for="changePassEmail">Email</label>
+        <input type="email" id="changePassEmail" class="border border-2">
+        <label for="oldPassword">Old Password</label>
+        <input type="password" id="oldPassword" class="border border-2">
+        <label for="newPassword">New Password</label>
+        <input type="password" id="newPassword" class="border border-2">
+        <label for="conPassword">Confirm New Password</label>
+        <input type="password" id="conPassword" class="border border-2">
     <input type="submit" id="changePassSubmit" class="border border-2 bg-blue-600 hover:bg-blue-800 text-white font-bold py-2 px-4 rounded transition-colors duration-150" value="Submit">
 </form>
     </div>

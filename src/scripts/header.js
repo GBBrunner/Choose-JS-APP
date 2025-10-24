@@ -108,7 +108,8 @@ function createFooter() {
     if (document.querySelector('footer.site-footer')) return;
 
     const footer = document.createElement('footer');
-    footer.className = 'site-footer flex flex-wrap justify-center items-center h-[6rem] gap-3 w-screen p-4 bg-indigo-700 mt-8 text-white text-center';
+    // Ensure the footer participates in stacking context and sits above embedded content
+    footer.className = 'site-footer relative z-50 flex flex-wrap justify-center items-center h-[6rem] gap-3 w-screen p-4 bg-indigo-700 mt-8 text-white text-center';
 
     // Simple footer content; customize as needed
     const year = new Date().getFullYear();

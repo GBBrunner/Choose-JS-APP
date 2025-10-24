@@ -175,7 +175,7 @@ function renderFavoritesSections() {
 document.addEventListener('DOMContentLoaded', async () => {
   // Create the header dynamically
   createHeader();
-  createFooter();
+  
   // Initial render
   if (
     document.getElementById('favorite-movies-container') ||
@@ -183,6 +183,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   ) {
     renderFavoritesSections();
   }
+  createFooter();
 });
 
 // Re-render when favorites are updated elsewhere in the app
@@ -215,23 +216,25 @@ class favDisplay {
 }
 
 class favoriteMovie {
-    constructor(id, title, poster) {
+    constructor(id, title, poster, mediaType = 'movie') {
         this.poster = poster;
         this.title = title;
         this.id = id;
+        this.mediaType = mediaType;
     }
     render() {
         const favItem = document.createElement('div');
         favItem.classList.add('favItem');
         favItem.innerHTML = `
+          <a href='/src/html/title_details.html?id=${this.id}&type=${this.mediaType}'>
             <div class="flex flex-nowrap justify-between">
               <img src="${this.poster}" alt="movie image">
               <div class="flex flex-col justify-center px-4">
                 <p class="text-xs px-2">TMBD ID:${this.id}</p>
                 <h2 class="text-lg font-bold">${this.title}</h2>
               </div>
-              
             </div>
+            </a>
             <i class="fas fa-trash text-xl cursor-pointer hover:text-red-900 removeFav" title="Remove from favorites"></i>
         `;
 
@@ -250,7 +253,10 @@ class favoriteMovie {
 
 function createFavMovies(obj) {
     for (const movie of obj.list) {
-        const favMovie = new favoriteMovie(movie.id, movie.title, movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '');
-        obj.container.appendChild(favMovie.render());
+    const poster = movie.poster_path ? `https://image.tmdb.org/t/p/w500${movie.poster_path}` : '';
+    // Support both `media_type` and `mediaType` keys and default to 'movie'
+    const mediaType = movie.media_type || movie.mediaType || 'movie';
+    const favMovie = new favoriteMovie(movie.id, movie.title, poster, mediaType);
+    obj.container.appendChild(favMovie.render());
     }
 }

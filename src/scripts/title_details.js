@@ -148,10 +148,13 @@ class CommentItem {
             if (placeholder) placeholder.appendChild(delete_reviewBtn);
 
             delete_reviewBtn.addEventListener('click', () => {
-                // Remove the comment from the reviews array by matching timestamp + username + comment text
+                commentItem.remove();
+                const index = reviews.comments.indexOf(this);
+                if (index > -1) {
+                    reviews.comments.splice(index, 1);
+                    localStorage.setItem('myComments', JSON.stringify(reviews.comments));
+                }
 
-                localStorage.setItem('myComments', JSON.stringify(reviews.comments));
-                if (typeof searchComments === 'function') searchComments(this.id, this.mediaType);
             });
         }
 }
@@ -235,7 +238,9 @@ document.addEventListener('DOMContentLoaded', () => {
         if (reviewSection) reviewSection.style.display = 'none';
     });
 
-    createFooter();
+        // Create the footer after rendering videos so it appears after the generated content
+        // (ensures footer is placed beneath any dynamically added iframes)
+        createFooter();
 
     // Fetch and display the title details
     (async () => {
