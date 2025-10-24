@@ -1,8 +1,9 @@
-import {createFooter} from './header.js';
+import {createHeader, createFooter} from './header.js';
 let currentList;
 
 document.addEventListener('DOMContentLoaded', () => {
     // Create the header dynamically
+    createHeader();
     createFooter();
     
     let checkList = JSON.parse(localStorage.getItem('myUserList'));

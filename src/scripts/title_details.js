@@ -109,97 +109,131 @@ function renderVideos(videos) {
     const newBreak = document.createElement('br');
     container.appendChild(newBreak);
 }
-function displayReviewSection() {
-    const commentDisplayArea = document.getElementById('comments')
-    class CommentItem {
-        constructor(comment, review, identity ) {
-            this.identity = 'Anonymous';
-            this.comment = comment;
-            this.review = review;
-            this.id = title.id;
-        }
-        render(area) {
-            const commentItem = document.createElement('div');
-            commentItem.className = 'comment';
-            commentItem.innerHTML = `
-                <h3><strong>${this.identity}</strong></h3>
-                <p>${this.comment}</p>
-                <p><em>Comment ID: ${this.id}</em></p>
-            `
-            area.appendChild(commentItem)
-        }
-    };
-    class SearchCommentItem {
-        constructor(comment, id) {
-            this.comment = comment;
-            this.id = id;
-        }
-        render(area) {
-            const commentItem = document.createElement('div');
-            commentItem.className = 'comment';
-            commentItem.innerHTML = `
-                <h3><strong>Anonymous</strong></h3>
-                <p>${this.comment}</p>
-                <p><em>Comment ID: ${this.id}</em></p>
-            `
-            area.appendChild(commentItem)
-        }
-    };
-    class ReviewWrap {
-        constructor() {
-            this.comments = [];
-        }
-        add(newCommentItem) {
-            this.comments.unshift(newCommentItem);
-            localStorage.setItem('myComments', JSON.stringify(this.comments))
-        }
+// Review and Comments System
+class CommentItem {
+    constructor(comment, rating, titleId, username = 'Anonymous', timestamp, mediaType = 'movie') {
+        this.comment = comment;
+        this.rating = rating;
+        this.id = titleId;
+        this.mediaType = mediaType;
+        this.username = username;
+        this.timestamp = timestamp;
     }
-    const reviews = new ReviewWrap();
-    const reviewSubmitButton = document.getElementById('submitComment')
-    reviewSubmitButton.addEventListener('click', () => {
-        const review_input = document.getElementById('review_input').value;
-        if (review_input.length === 0) {
-            alert('Please enter a comment before submitting.');
-            return;
+    render(area) {
+        const d = this.timestamp ? new Date(this.timestamp) : null;
+        const pad = n => String(n).padStart(2, '0');
+        const formattedTimestamp = d ? `${pad(d.getMonth() + 1)}/${pad(d.getDate())}/${String(d.getFullYear()).slice(-2)}` : '';
+        const commentItem = document.createElement('div');
+        commentItem.className = 'comment bg-indigo-200 p-2 rounded-lg mb-2';
+        commentItem.innerHTML = `
+            <h3><strong>${this.username}</strong><span class="mx-2">${formattedTimestamp}</span></h3>
+            <p>${this.comment}</p>
+            <div class="flex items-center justify-between mt-2">
+            <p class="flex items-center gap-2 mb-0">
+                Rating: ${this.rating}
+                <span class="fa fa-solid fa-star text-orange-500"></span>
+            </p>
+            <span class="delete-placeholder"></span>
+            </div>
+        `;
+        // Always show the comment so every review for the title is visible
+        area.appendChild(commentItem);
+
+        // Only show a delete button to the author of the review
+        const currentUserName = userCheck ? (userCheck.firstName + ' ' + userCheck.lastName) : null;
+        if (currentUserName && currentUserName === this.username) {
+            const delete_reviewBtn = document.createElement('button');
+            delete_reviewBtn.className = 'fa fa-solid fa-trash bg-red-600 text-white px-2 py-1 rounded-full hover:bg-red-800 transition-colors duration-150 text-sm';
+            const placeholder = commentItem.querySelector('.delete-placeholder');
+            if (placeholder) placeholder.appendChild(delete_reviewBtn);
+
+            delete_reviewBtn.addEventListener('click', () => {
+                // Remove the comment from the reviews array by matching timestamp + username + comment text
+
+                localStorage.setItem('myComments', JSON.stringify(reviews.comments));
+                if (typeof searchComments === 'function') searchComments(this.id, this.mediaType);
+            });
         }
-        const newComment = new CommentItem(review_input);
-        reviews.add(newComment);
-        loadComments();
-    });
-    function loadComments() {
-        commentDisplayArea.innerHTML=' ';
-        for (const comment of reviews.comments) {
-            comment.render(commentDisplayArea);
-        }
-    }
-    function searchComments() {
-        const searchInput = title.id;
-        const searchDisplayArea = document.getElementById('searchDisplayArea');
-        searchDisplayArea.innerHTML = ' ';
-        for (const review of reviews.comments) {
-            if (review.id === searchInput) {
-                review.render(searchDisplayArea);
-            }
-        }
-    };
-    const searchElement = document.getElementById('searchInput');
-    searchElement.addEventListener('input', searchComments);
-    document.addEventListener('DOMContentLoaded', () => {
-        let storedReviews = JSON.parse(localStorage.getItem('myComments'));
-        storedReviews = storedReviews.reverse();
-        for (const review of storedReviews) {
-            const myNewReview = new SearchCommentItem(review.comment, review.id);
-            reviews.add(myNewReview);
-        }
-        loadComments();
-    });
 }
+};
+class ReviewWrap {
+    constructor() {
+        this.comments = [];
+    }
+    add(newCommentItem) {
+        this.comments.unshift(newCommentItem);
+        localStorage.setItem('myComments', JSON.stringify(this.comments))
+    }
+}
+const reviews = new ReviewWrap();
+function searchComments(id, type) {
+    const searchInput = id;
+    const searchType = type;
+    const searchDisplayArea = document.getElementById('searchDisplayArea');
+    searchDisplayArea.innerHTML = ' ';
+    let foundComments = false;
+    for (const review of reviews.comments) {
+        if (review.id === searchInput && review.mediaType === searchType) {
+            review.render(searchDisplayArea);
+            foundComments = true;
+        }
+    }
+    if (!foundComments) {
+        const noCommentsMsg = document.createElement('p');
+        noCommentsMsg.textContent = 'No comments for this title have been made yet';
+        noCommentsMsg.className = 'text-gray-600 italic px-4 py-1';
+        searchDisplayArea.appendChild(noCommentsMsg);
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
+    let storedReviews = JSON.parse(localStorage.getItem('myComments')) || [];
+    storedReviews = storedReviews.reverse();
+    for (const review of storedReviews) {
+        const myNewReview = new CommentItem(
+            review.comment,
+            review.rating !== undefined ? review.rating : 'N/A',
+            review.id,
+            review.username,
+            review.timestamp,
+            review.mediaType || 'movie'
+        );
+        reviews.add(myNewReview);
+    }
+
     const params = new URLSearchParams(window.location.search);
     const titleId = params.get('id');
     const mediaType = (params.get('type') === 'tv') ? 'tv' : 'movie';
     // Expose the detected media type so displayTitleDetails can access it
     window.__mediaType = mediaType;
+    searchComments(titleId, mediaType);
+
+    // Set up review submit button with titleId
+    const reviewSubmitButton = document.getElementById('submit_review');
+    reviewSubmitButton.addEventListener('click', () => {
+        const review_input = document.getElementById('review_input').value;
+        const rating_input = document.getElementById('rating_input').value;
+        if (review_input.length === 0) {
+            alert('Please enter a comment before submitting.');
+            return;
+        }
+        if (!rating_input || isNaN(rating_input) || rating_input < 1 || rating_input > 10) {
+            alert('Please enter a valid rating between 1 and 10.');
+            return;
+        }
+        const timestamp = new Date(); 
+        const newComment = new CommentItem(review_input, rating_input, titleId, userCheck ? userCheck.firstName + ' ' + userCheck.lastName : 'Anonymous', timestamp, mediaType);
+        reviews.add(newComment);
+        // Optionally, clear the form after submit
+        document.getElementById('review_input').value = '';
+        document.getElementById('rating_input').value = '';
+        // Refresh the displayed comments for this title
+        searchComments(titleId, mediaType);
+        // Close the modal and hide the review section after submitting
+        if (typeof closeModal === 'function') closeModal();
+        const reviewSection = document.getElementById('rate_and_review');
+        if (reviewSection) reviewSection.style.display = 'none';
+    });
 
     createFooter();
 
