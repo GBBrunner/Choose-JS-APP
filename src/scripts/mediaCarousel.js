@@ -197,7 +197,12 @@ document.addEventListener('DOMContentLoaded', async () => {
     await createCarousel(config.url, config.title, false, config.tileSize);
   }
   setupSearchHandler();
-  isSearchHandlerAttached = true;
+  // Check whether isSearchHandlerAttached exists before assigning to avoid ReferenceError.
+  if (typeof isSearchHandlerAttached !== 'undefined') {
+    isSearchHandlerAttached = true;
+  } else{
+    return
+  }
 });
 
 // Exports for functional use in other modules (re-export API_OPTIONS for existing imports if any)
