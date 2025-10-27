@@ -60,15 +60,11 @@ function displayTitleDetails(media) {
         });
 
     container.appendChild(headerRow);
-
     const titleOverview = document.createElement('p');
         titleOverview.textContent = media.overview || 'No overview available.';
-        titleOverview.className = 'text-gray-700 mb-4';
+        titleOverview.className = 'text-gray-700 mb-4 whitespace-normal break-words';
     container.appendChild(titleOverview);
 }
-
-
-
 function createIframe(video) {
     const iframe = document.createElement('iframe');
         iframe.src = `https://www.youtube.com/embed/${video.key}`;
@@ -124,10 +120,10 @@ class CommentItem {
         const pad = n => String(n).padStart(2, '0');
         const formattedTimestamp = d ? `${pad(d.getMonth() + 1)}/${pad(d.getDate())}/${String(d.getFullYear()).slice(-2)}` : '';
         const commentItem = document.createElement('div');
-        commentItem.className = 'comment bg-indigo-200 p-2 rounded-lg mb-2';
+        commentItem.className = ' w-[18rem] mx-4 comment bg-indigo-200 p-2 rounded-lg mb-2';
         commentItem.innerHTML = `
             <h3><strong>${this.username}</strong><span class="mx-2">${formattedTimestamp}</span></h3>
-            <p>${this.comment}</p>
+            <p class="whitespace-normal break-words">${this.comment}</p>
             <div class="flex items-center justify-between mt-2">
             <p class="flex items-center gap-2 mb-0">
                 Rating: ${this.rating}
