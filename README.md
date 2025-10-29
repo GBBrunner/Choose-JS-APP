@@ -8,7 +8,12 @@ export const API_ACCESS_TOKEN = 'insert-your-themoviedb.org-API-Access-key-here'
 ```
 
 This project uses Vite, Tailwind, and Jasmine for testing. 
-Make sure you run 'npm install' for functionality.
+For functionality make sure you run '
+```bash
+# Install project dependencies
+npm install
+```
+ 
 
 ## ---------- HEADER ----------
 Header will be the same and functional on each and every page. This is done dynmically in JavaScript.
